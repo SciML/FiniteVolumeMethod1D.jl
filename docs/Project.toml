@@ -1,0 +1,3 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+FiniteVolumeMethod1D = "cfdabe9e-7cc8-40e3-9725-d80209c3e763"
