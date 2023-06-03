@@ -6,6 +6,9 @@ using SafeTestsets
     @safetestset "FVMGeometry" begin
         include("geometry.jl")
     end
+    @safetestset "BoundaryConditions" begin
+        include("boundary_conditions.jl")
+    end
     @safetestset "FVMProblem" begin
         include("problem.jl")
     end
@@ -18,6 +21,15 @@ using SafeTestsets
         end
         @safetestset "Fisher" begin
             include("fisher.jl")
+        end
+        @safetestset "Robin Diffusion" begin
+            include("robin_diffusion.jl")
+        end
+        @safetestset "Reaction-Diffusion" begin
+            include("dirichlet_source.jl")
+        end
+        @safetestset "Heat Equation" begin
+            include("heat.jl")
         end
     end
 end
