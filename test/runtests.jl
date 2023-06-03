@@ -28,10 +28,8 @@ using SafeTestsets
         @safetestset "Reaction-Diffusion" begin
             include("dirichlet_source.jl")
         end
+        @safetestset "Heat Equation" begin
+            include("heat.jl")
+        end
     end
 end
-
-# dirichlet_source 
-# fisher 
-# porous_medimum 
-# robin_diffusion

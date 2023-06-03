@@ -10,9 +10,9 @@ using DomainSets
 #   where   D(u) = 1/(10u) + 50/u^2 + 3/u^3
 #           R(u) = βKu(1 - u/K)
 #           u(0, x) = x < 0 ? 1 : 1/2
-#           ∂ₓu(t, -6π) = 0
-#           ∂ₓu(t, 6π) = 0,
-#           for -6π ≤ x ≤ 6 and 0 ≤ t \leq 5
+#           ∂ₓu(t, -2π) = 0
+#           ∂ₓu(t, 2π) = 0,
+#           for -2π ≤ x ≤ 2π and 0 ≤ t \leq 1
 
 @parameters t x
 @parameters θ₁ θ₂ θ₃

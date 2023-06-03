@@ -4,7 +4,7 @@
 [![Build Status](https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/DanielVandH/FiniteVolumeMethod1D.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/DanielVandH/FiniteVolumeMethod1D.jl)
 
-This is a lightweight package for solving equations of the form
+This is a package for solving equations of the form
 
 $$
 \frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left(D(u, x, t)\frac{\partial u}{\partial x}\right) + R(u, x, t)
@@ -23,4 +23,4 @@ julia> ] add https://github.com/DanielVandH/FiniteVolumeMethod1D.jl
 julia> using FiniteVolumeMethod1D
 ```
 
-For examples on how to use it, please see the docs. If you want a more complete two-dimensional version, please see my other package [FiniteVolumeMethod.jl](https://github.com/DanielVandH/FiniteVolumeMethod.jl).
+For examples on how to use it, please see the docs. If you want a more complete two-dimensional version, please see my other (registered) package [FiniteVolumeMethod.jl](https://github.com/DanielVandH/FiniteVolumeMethod.jl).

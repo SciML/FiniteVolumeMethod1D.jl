@@ -1,7 +1,7 @@
 abstract type AbstractBoundaryCondition{F,P} end
 (bc::AbstractBoundaryCondition{F,P})(u, t) where {F,P} = bc.f(u, t, bc.p)
 
-raw"""
+@doc raw"""
     Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
 
 A Dirichlet boundary condition with fields `f` and `p` (default `p = nothing`),
@@ -25,7 +25,7 @@ where `a` is one of the endpoints.
 Base.@kwdef struct Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
-    Dirichlet(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
+    Dirichlet(f::F, p::P=nothing) where {F,P} = new{F,P}(f, p)
 end
 Dirichlet(f::Function) = Dirichlet(f, nothing)
 Dirichlet(v::Number) =
@@ -33,7 +33,7 @@ Dirichlet(v::Number) =
         Dirichlet((u, t, p) -> oftype(u, v))
     end
 
-raw"""
+@doc raw"""
     Neumann{F,P} <: AbstractBoundaryCondition{F,P}
 
 A Neumann boundary condition with fields `f` and `p` (default `p = nothing`),
@@ -57,14 +57,14 @@ where `a` is one of the endpoints.
 Base.@kwdef struct Neumann{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
-    Neumann(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
+    Neumann(f::F, p::P=nothing) where {F,P} = new{F,P}(f, p)
 end
 Neumann(v::Number) =
     let v = v
         Neumann((u, t, p) -> oftype(u, v))
     end
 
-raw"""
+@doc raw"""
     Robin{F,P} <: AbstractBoundaryCondition{F,P}
 
 A Robin boundary condition with fields `f` and `p` (default `p = nothing`),
@@ -89,7 +89,7 @@ where `a` is one of the endpoints.
 Base.@kwdef struct Robin{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
-    Robin(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
+    Robin(f::F, p::P=nothing) where {F,P} = new{F,P}(f, p)
 end
 Robin(a::Number, b::Number) =
     let a = a, b = b
