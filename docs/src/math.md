@@ -9,8 +9,8 @@ In this section, we provide some of the mathematical details for discretising th
 ```math
 \begin{align*}
 \dfrac{\partial u}{\partial t} &= \dfrac{\partial}{\partial x}\left(D(u)\dfrac{\partial u}{\partial x}\right) + R(u), & a \leq x \leq b,\, t_0 < t \leq t_1, \\
-a_0\left(u(a, t)\right) + b_0\left(u(a, t)\right)\dfrac{\partial u(a, t)}{\partial x} &= 0, & t_0 < t \leq t_1, \\
-a_1\left(u(b, t)\right) + b_1\left(u(b, t)\right)\dfrac{\partial u(b, t)}{\partial x} & =0, & t_0 < t \leq t_1, \\
+a_0\left(u(a, t), t\right) + b_0\left(u(a, t), t\right)\dfrac{\partial u(a, t)}{\partial x} &= 0, & t_0 < t \leq t_1, \\
+a_1\left(u(b, t), t\right) + b_1\left(u(b, t), t\right)\dfrac{\partial u(b, t)}{\partial x} & =0, & t_0 < t \leq t_1, \\
 u(x, 0) &= f(x), & a \leq x \leq b.
 \end{align*}
 ```
@@ -111,12 +111,12 @@ The above derivation assumes that $b_0, b_1 \neq 0$ and that a Robin boundary co
 - `Neumann`
 - `Robin`
 
-A Dirichlet boundary condition is given by $u(a, t) = f\left(u(a, t)\right)$, and similarly for $x=b$, and so we cannot make a definition for the $a_j$ or $b_j$ coefficients in this case, with $j \in \{0, 1\}$. We instead use the callback interface from DifferentialEquations.jl for this case.
+A Dirichlet boundary condition is given by $u(a, t) = g\left(u(a, t), t\right)$, and similarly for $x=b$, and so we cannot make a definition for the $a_j$ or $b_j$ coefficients in this case, with $j \in \{0, 1\}$. We instead use the callback interface from DifferentialEquations.jl for this case.
 
-Neumann boundary conditions take the form $\partial u(a, t)/\partial x = f\left(u(a, t)\right)$, and similarly for $x=b$. This boundary condition can be written
+Neumann boundary conditions take the form $\partial u(a, t)/\partial x = g\left(u(a, t), t\right)$, and similarly for $x=b$. This boundary condition can be written
 
 ```math
--f\left(u(a, t)\right) + \dfrac{\partial u(a, t)}{\partial x} = 0,
+-g\left(u(a, t), t\right) + \dfrac{\partial u(a, t)}{\partial x} = 0,
 ```
 
-which is a Robin boundary condition with $a_0 = -f$ and $b_0 = 1$. 
+which is a Robin boundary condition with $a_0 = -g$ and $b_0 = 1$. 

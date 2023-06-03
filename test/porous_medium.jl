@@ -24,10 +24,10 @@ initial_condition[N′] = 2Q / base # Approximating a delta initial condition wi
 initial_time = 0.0
 final_time = 5.0
 saveat = [0.1, 0.5, 1.0, 2.0, 3.0, 5.0]
-diffusion = (u, p) -> p.p * (u / p.θ[1])^p.θ[2]
+diffusion = (u, x, t, p) -> p.p * (u / p.θ[1])^p.θ[2]
 diffusion_p = D₀
 diffusion_θ = [u₀, m]
-diffusion_parameters = (p = diffusion_p, θ = diffusion_θ)
+diffusion_parameters = (p=diffusion_p, θ=diffusion_θ)
 lhs = Neumann(0.0)
 rhs = Neumann(0.0)
 prob = FVMProblem(mesh_points, lhs, rhs;
@@ -36,7 +36,7 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     initial_condition,
     diffusion_function=diffusion,
     diffusion_parameters,
-    reaction_function=(u, p) -> zero(u)
+    reaction_function=(u, x, t, p) -> zero(u)
 )
 sol = solve(prob, TRBDF2(); saveat=saveat)
 exact = [exact_solution.(mesh_points, sol.t[i]) for i in eachindex(sol)]
@@ -58,3 +58,14 @@ ylims!(ax, 0, 0.5)
 xlims!(ax, -1, 1)
 fig_path = normpath(@__DIR__, "..", "test", "figures")
 @test_reference joinpath(fig_path, "porous_comparison.png") fig
+
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z")
+    sol_u = [sol(t) for t in t_range]
+    in_int_range = findall(x -> abs(x) < 1, mesh_points) # Makie won't clip the plot to (-1, 1)
+    surface!(ax, mesh_points[in_int_range], t_range, reduce(hcat, sol_u)[in_int_range, :], colormap=:viridis)
+    xlims!(ax, -1, 1)
+    fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
+    @test_reference joinpath(fig_path, "porous_surface.png") fig
+end

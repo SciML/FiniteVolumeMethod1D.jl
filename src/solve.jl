@@ -39,19 +39,21 @@ end
 end
 function update_lhs!(integrator)
     u = integrator.u
+    t = integrator.t
     prob = integrator.p
     boundary_conditions = prob.boundary_conditions
     lhs = boundary_conditions.lhs
-    val = lhs(u[begin])
+    val = lhs(u[begin], t)
     u[begin] = val
     return nothing
 end
 function update_rhs!(integrator)
     u = integrator.u
+    t = integrator.t
     prob = integrator.p
     boundary_conditions = prob.boundary_conditions
     rhs = boundary_conditions.rhs
-    val = rhs(u[begin])
+    val = rhs(u[begin], t)
     u[end] = val
     return nothing
 end

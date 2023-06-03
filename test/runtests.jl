@@ -25,5 +25,13 @@ using SafeTestsets
         @safetestset "Robin Diffusion" begin
             include("robin_diffusion.jl")
         end
+        @safetestset "Reaction-Diffusion" begin
+            include("dirichlet_source.jl")
+        end
     end
 end
+
+# dirichlet_source 
+# fisher 
+# porous_medimum 
+# robin_diffusion

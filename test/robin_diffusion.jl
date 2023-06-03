@@ -3,6 +3,8 @@ using LinearAlgebra
 using LinearSolve
 using OrdinaryDiffEq
 using NonlinearSolve
+using CairoMakie 
+using ReferenceTests
 
 # uₜ = (1/25)uₓₓ
 # u(0, t) = 0
@@ -30,8 +32,8 @@ end
 c = 1 / 5
 mesh_points = LinRange(0, 3, 2500)
 lhs = Dirichlet(0.0)
-rhs = Robin((u, p) -> (p[1] * u, p[2]), (1 / 2, 1.0))
-diffusion_function = (u, p) -> p^2
+rhs = Robin((u, t, p) -> (p[1] * u, p[2]), (1 / 2, 1.0))
+diffusion_function = (u, x, t, p) -> p^2
 diffusion_parameters = c
 ic = x -> 100(1 - x / 3)
 initial_condition = ic.(mesh_points)
@@ -46,3 +48,12 @@ sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.01)
 μ = compute_μₙ.(1:100)
 exact_sol = [exact_u.(mesh_points, sol.t[i], Ref(μ)) for i in eachindex(sol)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-2
+
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    sol_u = [sol(t) for t in t_range]
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
+    @test_reference joinpath(fig_path, "robin_diffusion_surface.png") fig
+end

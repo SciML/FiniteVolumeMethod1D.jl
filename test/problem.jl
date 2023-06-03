@@ -2,14 +2,14 @@ using ..FiniteVolumeMethod1D
 
 mesh_points = sort(rand(100))
 geo = FVMGeometry(mesh_points)
-diffusion_function = (u, p) -> u * p[1] + 2.0
+diffusion_function = (u, t, p) -> u * p[1] + 2.0
 diffusion_parameters = (1.0,)
-reaction_function = (u, p) -> u * p[1] + 2.0 + p[2]^2
+reaction_function = (u, t, p) -> u * p[1] + 2.0 + p[2]^2
 reaction_parameters = (1.0, 2.0)
 initial_condition = rand(100)
-final_time = 2.
-lhs = Dirichlet((u, p) -> 0.39u + p, 0.5)
-rhs = Neumann((u, p) -> 5.8)
+final_time = 2.0
+lhs = Dirichlet((u, t, p) -> 0.39u + p, 0.5)
+rhs = Neumann((u, t, p) -> 5.8)
 boundary_conditions = BoundaryConditions(lhs, rhs)
 prob = FVMProblem(;
     geometry=geo,
@@ -40,7 +40,7 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     initial_condition=initial_condition,
     final_time=final_time,
     initial_time=0.2)
-@test prob.geometry.mesh_points == geo.mesh_points 
+@test prob.geometry.mesh_points == geo.mesh_points
 @test prob.geometry.spacings == geo.spacings
 @test prob.geometry.volumes == geo.volumes
 @test prob.boundary_conditions == boundary_conditions

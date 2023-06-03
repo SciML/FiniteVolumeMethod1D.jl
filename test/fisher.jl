@@ -1,7 +1,8 @@
-
 using ..FiniteVolumeMethod1D
 using MethodOfLines
 using OrdinaryDiffEq
+using ReferenceTests
+using CairoMakie
 using ModelingToolkit
 using DomainSets
 
@@ -55,8 +56,8 @@ solt = sol[t]
 solx = sol[x]
 solu = sol[u(t, x)]
 
-diffusion_function = (u, p) -> inv(p[1] * u) + p[2] * inv(u^2) + p[3] * inv(u^3)
-reaction_function = (u, p) -> p[1] * p[2] * u * (1 - u / p[2])
+diffusion_function = (u, x, t, p) -> inv(p[1] * u) + p[2] * inv(u^2) + p[3] * inv(u^3)
+reaction_function = (u, x, t, p) -> p[1] * p[2] * u * (1 - u / p[2])
 diffusion_parameters = [1.0, 50.0, 3.0]
 reaction_parameters = [1e-3, 2.0]
 mesh_points = solx
@@ -78,3 +79,13 @@ fvm_prob = FVMProblem(
 fvm_sol = solve(fvm_prob, TRBDF2(), saveat=solt)
 fvm_solu = reduce(hcat, fvm_sol.u)'
 @test solu ≈ fvm_solu rtol = 1e-2
+
+let sol = fvm_sol, t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    sol_u = [sol(t) for t in t_range]
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
+    @test_reference joinpath(fig_path, "fisher_surface.png") fig
+    fig
+end

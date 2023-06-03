@@ -6,11 +6,11 @@ Definition of an `FVMProblem`.
 # Fields 
 - `geometry::FVMGeometry{T}`: The geometry of the problem.
 - `boundary_conditions::BoundaryConditions{L, R}`: The boundary conditions.
-- `diffusion_function::DF`: The diffusion function, of the form `(u, p) -> Number`, where `p = diffusion_parameters`.
+- `diffusion_function::DF`: The diffusion function, of the form `(u, x, t, p) -> Number`, where `p = diffusion_parameters`.
 - `diffusion_parameters::DP`: The parameters for the diffusion function.
-- `reaction_function::RF`: The reaction function, of the form `(u, p) -> Number`, where `p = reaction_parameters`.
+- `reaction_function::RF`: The reaction function, of the form `(u, x, t, p) -> Number`, where `p = reaction_parameters`.
 - `reaction_parameters::RP`: The parameters for the reaction function.
-- `initial_condition::IC`: The initial condition.
+- `initial_condition::IC`: The initial condition, with `initial_condition[i]` corresponding to the value at `geometry.mesh_points[i]` and `t = initial_time`.
 - `initial_time::FT`: The initial time.
 - `final_time::FT`: The final time.
 

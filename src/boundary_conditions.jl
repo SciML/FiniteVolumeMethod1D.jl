@@ -1,5 +1,5 @@
 abstract type AbstractBoundaryCondition{F,P} end
-(bc::AbstractBoundaryCondition{F,P})(u) where {F,P} = bc.f(u, bc.p)
+(bc::AbstractBoundaryCondition{F,P})(u, t) where {F,P} = bc.f(u, t, bc.p)
 
 raw"""
     Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
@@ -11,7 +11,7 @@ the parameters for `f`.
 A Dirichlet boundary condition takes the form
 
 ```math
-u(a, t) ↤ f(u(a, t), a, t, p),
+u(a, t) ↤ f(u(a, t), t, p),
 ```
 
 where `a` is one of the endpoints. 
@@ -20,29 +20,30 @@ where `a` is one of the endpoints.
 
     Dirichlet(f::Function, p = nothing) -> Dirichlet(f, p)
     Dirichlet(; f, p = nothing)         -> Dirichlet(f, p)
-    Dirichlet(v::Number)                -> Dirichlet((u, p) -> oftype(u, v), nothing)
+    Dirichlet(v::Number)                -> Dirichlet((u, t, p) -> oftype(u, v), nothing)
 """
 Base.@kwdef struct Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
+    Dirichlet(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
 Dirichlet(f::Function) = Dirichlet(f, nothing)
 Dirichlet(v::Number) =
     let v = v
-        Dirichlet((u, p) -> oftype(u, v))
+        Dirichlet((u, t, p) -> oftype(u, v))
     end
 
 raw"""
     Neumann{F,P} <: AbstractBoundaryCondition{F,P}
 
 A Neumann boundary condition with fields `f` and `p` (default `p = nothing`),
-with `f` being a function of the form `f(u, p)` and `p` being
+with `f` being a function of the form `f(u, t, p)` and `p` being
 the parameters for `f`.
 
 A Neumann boundary condition takes the form
 
 ```math
-\dfrac{\partial u}{\partial x}(a, t) = f(u(a, t), p),
+\dfrac{\partial u}{\partial x}(a, t) = f(u(a, t), t, p),
 ```
 
 where `a` is one of the endpoints. 
@@ -51,30 +52,30 @@ where `a` is one of the endpoints.
 
     Neumann(f::Function, p = nothing) -> Neumann(f, p)
     Neumann(; f, p = nothing)         -> Neumann(f, p)
-    Neumann(v::Number)                -> Neumann((u, p) -> oftype(u, v), nothing)
+    Neumann(v::Number)                -> Neumann((u, t, p) -> oftype(u, v), nothing)
 """
 Base.@kwdef struct Neumann{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
+    Neumann(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
-Neumann(f::Function) = Neumann(f, nothing)
 Neumann(v::Number) =
     let v = v
-        Neumann((u, p) -> oftype(u, v))
+        Neumann((u, t, p) -> oftype(u, v))
     end
 
 raw"""
     Robin{F,P} <: AbstractBoundaryCondition{F,P}
 
 A Robin boundary condition with fields `f` and `p` (default `p = nothing`),
-with `f` being a function of the form `f(u, p)` and `p` being
+with `f` being a function of the form `f(u, t, p)` and `p` being
 the parameters for `f`. The function `f` should return a `Tuple` of the form 
 `(a₀, b₀)`, where `a₀` and `b₀` are the coefficients in the Robin boundary condition.
 
 A Robin boundary condition takes the form
 
 ```math
-a₀(u(a, t), p) + b₀\dfrac{\partial u}{\partial x}(a, t) = 0,
+a₀(u(a, t), t, p) + b₀(u(a, t), t, p)\dfrac{\partial u}{\partial x}(a, t) = 0,
 ```
 
 where `a` is one of the endpoints. 
@@ -83,16 +84,16 @@ where `a` is one of the endpoints.
 
     Robin(f::Function, p = nothing)             -> Robin(f, p)
     Robin(; f, p = nothing)                     -> Robin(f, p)
-    Robin(a::Number, b::Number)                 -> Robin((u, p) -> (oftype(u, a), oftype(u, b)), nothing)
+    Robin(a::Number, b::Number)                 -> Robin((u, t, p) -> (oftype(u, a), oftype(u, b)), nothing)
 """
 Base.@kwdef struct Robin{F,P} <: AbstractBoundaryCondition{F,P}
     f::F
     p::P = nothing
+    Robin(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
-Robin(f::Function) = Robin(f, nothing)
 Robin(a::Number, b::Number) =
     let a = a, b = b
-        Robin((u, p) -> (oftype(u, a), oftype(u, b)))
+        Robin((u, t, p) -> (oftype(u, a), oftype(u, b)))
     end
 
 is_dirichlet(::AbstractBoundaryCondition) = false
@@ -102,10 +103,10 @@ is_neumann(::Neumann) = true
 is_robin(::AbstractBoundaryCondition) = false
 is_robin(::Robin) = true
 
-get_ab(bc::Dirichlet, u) = throw(ArgumentError("Cannot get a or b for Dirichlet boundary condition."))
-get_ab(bc::Neumann, u) = (-bc(u), one(u))
-get_ab(bc::Robin, u) =
-    let val = bc(u)
+get_ab(bc::Dirichlet, u, t) = throw(ArgumentError("Cannot get a or b for Dirichlet boundary condition."))
+get_ab(bc::Neumann, u, t) = (-bc(u, t), one(u))
+get_ab(bc::Robin, u, t) =
+    let val = bc(u, t)
         return (val[1], val[2])
     end
 
