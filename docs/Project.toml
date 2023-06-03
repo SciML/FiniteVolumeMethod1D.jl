@@ -2,3 +2,4 @@
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 FiniteVolumeMethod1D = "cfdabe9e-7cc8-40e3-9725-d80209c3e763"
+LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"

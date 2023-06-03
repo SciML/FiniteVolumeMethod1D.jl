@@ -34,7 +34,7 @@ prob = FVMProblem(mesh_points;
     initial_condition,
     diffusion_function=diffusion,
     diffusion_parameters,
-    reaction_function=Returns(0.0)
+    reaction_function=(u, p) -> zero(u)
 )
 sol = solve(prob, TRBDF2(); saveat=saveat)
 exact = [exact_solution.(mesh_points, sol.t[i]) for i in eachindex(sol)]
