@@ -12,13 +12,9 @@ $$
 
 using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with support for the following types of boundary conditions (shown at $x = a$, but you can mix boundary condition types, e.g. Neumann at $x=a$ and Robin at $x=b$):
 
-$$
-\begin{align*}
-a_0\left(u(a, t), a, t\right) + b_0\left(u(a, t), a, t\right)\dfrac{\partial u(a, t)}{\partial x} &= 0, \quad (\text{Robin}) \\
-\dfrac{\partial u(a, t)}{\partial x} &= a_0\left(u(a, t), a, t), \quad (\text{Neumann}) \\
-u(a, t) &\mapsfrom a_0\left(u(a, t), a, t\right), \quad (\text{Dirichlet}).
-\end{align*}
-$$
+- `Robin`: $a_0\left(u(a, t), a, t\right) + b_0\left(u(a, t), a, t\right)\dfrac{\partial u(a, t)}{\partial x}$.
+- `Neumann`: $\dfrac{\partial u(a, t)}{\partial x} = a_0\left(u(a, t), a, t)$.
+- `Dirichlet`: $u(a, t)\mapsfrom a_0\left(u(a, t), a, t\right)$.
 
 The package is not registered, so to install it you must do:
 
