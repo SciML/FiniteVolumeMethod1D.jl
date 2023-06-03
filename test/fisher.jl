@@ -72,5 +72,5 @@ fvm_prob = FVMProblem(
     final_time
 )
 fvm_sol = solve(fvm_prob, TRBDF2(), saveat=solt)
-fvm_solu = stack(fvm_sol.u)'
+fvm_solu = reduce(hcat, fvm_sol.u)'
 @test solu ≈ fvm_solu rtol=1e-3
