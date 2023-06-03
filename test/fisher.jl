@@ -55,10 +55,10 @@ solt = sol[t]
 solx = sol[x]
 solu = sol[u(t, x)]
 
-diffusion_function = (u, θ, p) -> inv(θ[1] * u) + θ[2] * inv(u^2) + θ[3] * inv(u^3)
-reaction_function = (u, θ, p) -> θ[1] * θ[2] * u * (1 - u / θ[2])
-diffusion_theta = [1.0, 50.0, 3.0]
-reaction_theta = [1e-3, 2.0]
+diffusion_function = (u, p) -> inv(p[1] * u) + p[2] * inv(u^2) + p[3] * inv(u^3)
+reaction_function = (u, p) -> p[1] * p[2] * u * (1 - u / p[2])
+diffusion_parameters = [1.0, 50.0, 3.0]
+reaction_parameters = [1e-3, 2.0]
 mesh_points = solx
 initial_condition = ic_f.(mesh_points)
 final_time = 5.0
@@ -66,11 +66,11 @@ fvm_prob = FVMProblem(
     mesh_points;
     diffusion_function,
     reaction_function,
-    diffusion_theta,
-    reaction_theta,
+    diffusion_parameters,
+    reaction_parameters,
     initial_condition,
     final_time
 )
 fvm_sol = solve(fvm_prob, TRBDF2(), saveat=solt)
 fvm_solu = reduce(hcat, fvm_sol.u)'
-@test solu ≈ fvm_solu rtol=1e-3
+@test solu ≈ fvm_solu rtol = 1e-3

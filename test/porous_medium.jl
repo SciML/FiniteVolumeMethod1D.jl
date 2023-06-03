@@ -24,16 +24,16 @@ initial_condition[N′] = 2Q / base # Approximating a delta initial condition wi
 initial_time = 0.0
 final_time = 5.0
 saveat = [0.1, 0.5, 1.0, 2.0, 3.0, 5.0]
-diffusion = (u, θ, p) -> p * (u / θ[1])^θ[2]
-diffusion_parameters = D₀
+diffusion = (u, p) -> p.p * (u / p.θ[1])^p.θ[2]
+diffusion_p = D₀
 diffusion_θ = [u₀, m]
+diffusion_parameters = (p = diffusion_p, θ = diffusion_θ)
 prob = FVMProblem(mesh_points;
     initial_time,
     final_time,
     initial_condition,
     diffusion_function=diffusion,
     diffusion_parameters,
-    diffusion_theta=diffusion_θ,
     reaction_function=Returns(0.0)
 )
 sol = solve(prob, TRBDF2(); saveat=saveat)

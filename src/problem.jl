@@ -1,5 +1,5 @@
 """
-    FVMProblem{T,DF,DP,Dθ,RF,RP,Rθ,IC,FT}
+    FVMProblem{T,DF,DP,RF,RP,IC,FT}
 
 Definition of an `FVMProblem`.
 
@@ -7,7 +7,6 @@ Definition of an `FVMProblem`.
 - `geometry::FVMGeometry{T}`: The geometry of the problem.
 - `diffusion_function::DF`: The diffusion function.
 - `diffusion_parameters::DP`: The parameters for the diffusion function.
-- `diffusion_theta::Dθ`: The parameters for the diffusion function that are to be estimated.
 - `reaction_function::RF`: The reaction function.
 - `reaction_parameters::RP`: The parameters for the reaction function.
 - `reaction_theta::Rθ`: The parameters for the reaction function that are to be estimated.
@@ -23,10 +22,8 @@ You can use the default constructor, but we also provide the constructor
         geometry, 
         diffusion_function,
         diffusion_parameters = nothing,
-        diffusion_theta = nothing,
         reaction_function = Returns(0.0),
         reaction_parameters = nothing,
-        reaction_theta = nothing,
         initial_condition,
         initial_time = 0.0,
         final_time)
@@ -42,14 +39,12 @@ To solve the `FVMProblem`, just use `solve` as you would in DifferentialEquation
 
     sol = solve(prob, Tsit5(), saveat=0.1)
 """
-Base.@kwdef struct FVMProblem{T,DF,DP,Dθ,RF,RP,Rθ,IC,FT}
+Base.@kwdef struct FVMProblem{T,DF,DP,RF,RP,IC,FT}
     geometry::FVMGeometry{T}
     diffusion_function::DF
     diffusion_parameters::DP = nothing
-    diffusion_theta::Dθ = nothing
     reaction_function::RF = Returns(0.0)
     reaction_parameters::RP = nothing
-    reaction_theta::Rθ = nothing
     initial_condition::IC
     initial_time::FT = 0.0
     final_time::FT

@@ -2,37 +2,35 @@ function pde_odes!(dudt, u, prob, t)
     mesh = prob.geometry
     D = prob.diffusion_function
     Dp = prob.diffusion_parameters
-    Dθ = prob.diffusion_theta
     R = prob.reaction_function
     Rp = prob.reaction_parameters
-    Rθ = prob.reaction_theta
     V = mesh.volumes
     h = mesh.spacings
     V₁ = V[begin]
-    D₁ = D(u[begin], Dθ, Dp)
-    D₂ = D(u[begin+1], Dθ, Dp)
+    D₁ = D(u[begin], Dp)
+    D₂ = D(u[begin+1], Dp)
     D̄₁₂ = (D₁ + D₂) / 2
     h₁ = h[1]
-    R₁ = R(u[begin], Rθ, Rp)
+    R₁ = R(u[begin], Rp)
     dudt[begin] = inv(V₁) * (D̄₁₂ * ((u[begin+1] - u[begin]) / h₁)) + R₁
     @inbounds for i in (firstindex(dudt)+1):(lastindex(dudt)-1)
         Vᵢ = V[i]
-        Dᵢ₋₁ = D(u[i-1], Dθ, Dp)
-        Dᵢ = D(u[i], Dθ, Dp)
-        Dᵢ₊₁ = D(u[i+1], Dθ, Dp)
+        Dᵢ₋₁ = D(u[i-1], Dp)
+        Dᵢ = D(u[i], Dp)
+        Dᵢ₊₁ = D(u[i+1], Dp)
         D̄ᵢᵢ₊₁ = (Dᵢ + Dᵢ₊₁) / 2
         D̄ᵢ₋₁ᵢ = (Dᵢ₋₁ + Dᵢ) / 2
         hᵢ = h[i]
         hᵢ₋₁ = h[i-1]
-        Rᵢ = R(u[i], Rθ, Rp)
+        Rᵢ = R(u[i], Rp)
         dudt[i] = inv(Vᵢ) * (D̄ᵢᵢ₊₁ * ((u[i+1] - u[i]) / hᵢ) - D̄ᵢ₋₁ᵢ * ((u[i] - u[i-1]) / hᵢ₋₁)) + Rᵢ
     end
     Vₙ = V[end]
-    Dₙ₋₁ = D(u[end-1], Dθ, Dp)
-    Dₙ = D(u[end], Dθ, Dp)
+    Dₙ₋₁ = D(u[end-1], Dp)
+    Dₙ = D(u[end], Dp)
     D̄ₙ₋₁ₙ = (Dₙ₋₁ + Dₙ) / 2
     hₙ₋₁ = h[end]
-    Rₙ = R(u[end], Rθ, Rp)
+    Rₙ = R(u[end], Rp)
     dudt[end] = -inv(Vₙ) * (D̄ₙ₋₁ₙ * ((u[end] - u[end-1]) / hₙ₋₁)) + Rₙ
 end
 
