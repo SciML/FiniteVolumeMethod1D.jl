@@ -170,10 +170,11 @@ diffusion_function = (u, x, t, p) -> p^2
 diffusion_parameters = 1 / 5
 ic = x -> 100(1 - x / 3)
 initial_condition = ic.(mesh_points)
+final_time = 3.0
 prob = FVMProblem(mesh_points, lhs, rhs;
     diffusion_function,
     diffusion_parameters,
-    final_time=3.0,
+    final_time=final_time,
     initial_condition
 )
 
