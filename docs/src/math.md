@@ -15,7 +15,7 @@ u(x, 0) &= f(x), & a \leq x \leq b.
 \end{align*}
 ```
 
-This is for the Robin boundary condition form at both ends. We assume that $b_0, b_1 \neq 0$. (We also support functions with arguments $x$ and $t$, e.g. $D(u, x, t)$, but for simplicity we omit the $x$ and $t$ arguments.)
+This is for the Robin boundary condition form at both ends. The other boundary condition types are discussed at the end. We assume that $b_0, b_1 \neq 0$. (We also support functions with arguments $x$ and $t$, e.g. $D(u, x, t)$, but for simplicity we omit the $x$ and $t$ arguments.)
 
 ## Interior Discretisation 
 
