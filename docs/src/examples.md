@@ -12,7 +12,7 @@ We start with a simple example:
 
 ```math
 \begin{align*}
-\dfrac{\partial u}{\partial t} &= \dfrac{\partial^2 u}{\partial x}, \quad 0 < x < 1,\,t>0, \\[8pt] 
+\dfrac{\partial u}{\partial t} &= \dfrac{\partial^2 u}{\partial x^2}, \quad 0 < x < 1,\,t>0, \\[8pt] 
 \dfrac{\partial u(0, t)}{\partial x} &= 0, \quad t>0, \\[8pt]
 \dfrac{\partial u(1, t)}{\partial x} &= 0, \quad t>0, \\[8pt]
 u(x, 0) & = x, \quad 0 < x < 1.
