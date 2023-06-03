@@ -1,5 +1,16 @@
 module FiniteVolumeMethod1D
 
-# Write your package code here.
+using SparseArrays
+using SciMLBase
+using CommonSolve
 
-end
+export FVMGeometry
+export FVMProblem
+export solve
+
+include("geometry.jl")
+include("problem.jl")
+include("equations.jl")
+include("solve.jl")
+
+end # module 
