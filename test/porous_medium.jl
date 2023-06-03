@@ -28,7 +28,9 @@ diffusion = (u, p) -> p.p * (u / p.θ[1])^p.θ[2]
 diffusion_p = D₀
 diffusion_θ = [u₀, m]
 diffusion_parameters = (p = diffusion_p, θ = diffusion_θ)
-prob = FVMProblem(mesh_points;
+lhs = Neumann(0.0)
+rhs = Neumann(0.0)
+prob = FVMProblem(mesh_points, lhs, rhs;
     initial_time,
     final_time,
     initial_condition,

@@ -1,18 +1,26 @@
-function pde_odes!(dudt, u, prob, t)
+function pde_odes!(dudt, u, prob::P, t) where {P}
     mesh = prob.geometry
+    boundary_conditions = prob.boundary_conditions
+    lhs = boundary_conditions.lhs
+    rhs = boundary_conditions.rhs
     D = prob.diffusion_function
     Dp = prob.diffusion_parameters
     R = prob.reaction_function
     Rp = prob.reaction_parameters
     V = mesh.volumes
     h = mesh.spacings
-    V₁ = V[begin]
-    D₁ = D(u[begin], Dp)
-    D₂ = D(u[begin+1], Dp)
-    D̄₁₂ = (D₁ + D₂) / 2
-    h₁ = h[1]
-    R₁ = R(u[begin], Rp)
-    dudt[begin] = inv(V₁) * (D̄₁₂ * ((u[begin+1] - u[begin]) / h₁)) + R₁
+    if !is_dirichlet(lhs)
+        V₁ = V[begin]
+        D₁ = D(u[begin], Dp)
+        D₂ = D(u[begin+1], Dp)
+        D̄₁₂ = (D₁ + D₂) / 2
+        h₁ = h[1]
+        R₁ = R(u[begin], Rp)
+        a₀, b₀ = get_ab(lhs, u[begin])
+        dudt[begin] = inv(V₁) * (D̄₁₂ * ((u[begin+1] - u[begin]) / h₁) + D₁ * a₀ / b₀) + R₁
+    else
+        dudt[begin] = zero(u[begin])
+    end
     @inbounds for i in (firstindex(dudt)+1):(lastindex(dudt)-1)
         Vᵢ = V[i]
         Dᵢ₋₁ = D(u[i-1], Dp)
@@ -25,13 +33,18 @@ function pde_odes!(dudt, u, prob, t)
         Rᵢ = R(u[i], Rp)
         dudt[i] = inv(Vᵢ) * (D̄ᵢᵢ₊₁ * ((u[i+1] - u[i]) / hᵢ) - D̄ᵢ₋₁ᵢ * ((u[i] - u[i-1]) / hᵢ₋₁)) + Rᵢ
     end
-    Vₙ = V[end]
-    Dₙ₋₁ = D(u[end-1], Dp)
-    Dₙ = D(u[end], Dp)
-    D̄ₙ₋₁ₙ = (Dₙ₋₁ + Dₙ) / 2
-    hₙ₋₁ = h[end]
-    Rₙ = R(u[end], Rp)
-    dudt[end] = -inv(Vₙ) * (D̄ₙ₋₁ₙ * ((u[end] - u[end-1]) / hₙ₋₁)) + Rₙ
+    if !is_dirichlet(rhs)
+        Vₙ = V[end]
+        Dₙ₋₁ = D(u[end-1], Dp)
+        Dₙ = D(u[end], Dp)
+        D̄ₙ₋₁ₙ = (Dₙ₋₁ + Dₙ) / 2
+        hₙ₋₁ = h[end]
+        Rₙ = R(u[end], Rp)
+        a₁, b₁ = get_ab(rhs, u[end])
+        dudt[end] = -inv(Vₙ) * (Dₙ * a₁ / b₁ + D̄ₙ₋₁ₙ * ((u[end] - u[end-1]) / hₙ₋₁)) + Rₙ
+    else
+        dudt[end] = zero(u[end])
+    end
 end
 
 jacobian_sparsity(prob::FVMProblem) = jacobian_sparsity(prob.geometry.mesh_points)

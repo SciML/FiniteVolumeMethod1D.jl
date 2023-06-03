@@ -7,10 +7,18 @@
 This is a lightweight package for solving equations of the form
 
 $$
-\frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left(D(u)\frac{\partial u}{\partial x}\right) + R(u)
+\frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left(D(u, x, t)\frac{\partial u}{\partial x}\right) + R(u, x, t)
 $$
 
-over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with no flux boundary conditions $\partial u(a, t)/\partial x = \partial u(b, t)/\partial x = 0$. The finite volume method is used.
+using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with support for the following types of boundary conditions (shown at $x = a$, but you can mix boundary condition types, e.g. Neumann at $x=a$ and Robin at $x=b$):
+
+```math
+\begin{align*}
+a_0\left(u(a, t), a, t\right) + b_0\left(u(a, t), a, t\right)\dfrac{\partial u(a, t)}{\partial x} &= 0, \quad (\text{Robin}) \\
+\dfrac{\partial u(a, t)}{\partial x} &= a_0\left(u(a, t), a, t), \quad (\text{Neumann}) \\
+u(a, t) &\mapsfrom a_0\left(u(a, t), a, t\right), \quad (\text{Dirichlet}).
+\end{align*}
+```
 
 The package is not registered, so to install it you must do:
 

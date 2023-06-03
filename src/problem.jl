@@ -1,15 +1,15 @@
 """
-    FVMProblem{T,DF,DP,RF,RP,IC,FT}
+    FVMProblem{T,DF,DP,RF,RP,L,R,IC,FT}
 
 Definition of an `FVMProblem`.
 
 # Fields 
 - `geometry::FVMGeometry{T}`: The geometry of the problem.
-- `diffusion_function::DF`: The diffusion function.
+- `boundary_conditions::BoundaryConditions{L, R}`: The boundary conditions.
+- `diffusion_function::DF`: The diffusion function, of the form `(u, p) -> Number`, where `p = diffusion_parameters`.
 - `diffusion_parameters::DP`: The parameters for the diffusion function.
-- `reaction_function::RF`: The reaction function.
+- `reaction_function::RF`: The reaction function, of the form `(u, p) -> Number`, where `p = reaction_parameters`.
 - `reaction_parameters::RP`: The parameters for the reaction function.
-- `reaction_theta::Rθ`: The parameters for the reaction function that are to be estimated.
 - `initial_condition::IC`: The initial condition.
 - `initial_time::FT`: The initial time.
 - `final_time::FT`: The final time.
@@ -20,6 +20,7 @@ You can use the default constructor, but we also provide the constructor
 
     FVMProblem(;
         geometry, 
+        boundary_conditions,
         diffusion_function,
         diffusion_parameters = nothing,
         reaction_function = Returns(0.0),
@@ -28,19 +29,20 @@ You can use the default constructor, but we also provide the constructor
         initial_time = 0.0,
         final_time)
 
-which provides some default values. Moreover, instead of providing `geometry`, you can use 
+which provides some default values. Moreover, instead of providing `geometry` and `boundary_conditions`, you can use 
 
-    FVMProblem(mesh_points; kwargs...)
+    FVMProblem(mesh_points, lhs, lhs; kwargs...)
 
-which will construct `geometry = FVMGeometry(mesh_points)`. The `kwargs...` are as above, except 
-without `geometry` of course.
+which will construct `geometry = FVMGeometry(mesh_points)` and `boundary_conditions = BoundaryConditions(lhs, rhs)`. 
+The `kwargs...` are as above, except without `geometry` and `boundary_conditions` of course.
 
 To solve the `FVMProblem`, just use `solve` as you would in DifferentialEquations.jl. For example, 
 
     sol = solve(prob, Tsit5(), saveat=0.1)
 """
-Base.@kwdef struct FVMProblem{T,DF,DP,RF,RP,IC,FT}
+Base.@kwdef struct FVMProblem{T,DF,DP,RF,RP,L,R,IC,FT}
     geometry::FVMGeometry{T}
+    boundary_conditions::BoundaryConditions{L,R}
     diffusion_function::DF
     diffusion_parameters::DP = nothing
     reaction_function::RF = Returns(0.0)
@@ -49,4 +51,7 @@ Base.@kwdef struct FVMProblem{T,DF,DP,RF,RP,IC,FT}
     initial_time::FT = 0.0
     final_time::FT
 end
-FVMProblem(mesh_points; kwargs...) = FVMProblem(; geometry=FVMGeometry(mesh_points), kwargs...)
+FVMProblem(mesh_points, lhs, rhs; kwargs...) = FVMProblem(;
+    geometry=FVMGeometry(mesh_points),
+    boundary_conditions=BoundaryConditions(lhs, rhs),
+    kwargs...)

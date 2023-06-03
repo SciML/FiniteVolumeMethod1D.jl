@@ -4,11 +4,12 @@ using SparseArrays
 using SciMLBase
 using CommonSolve
 
-export FVMGeometry
-export FVMProblem
+export FVMGeometry, BoundaryConditions, FVMProblem
+export Dirichlet, Neumann, Robin
 export solve
 
 include("geometry.jl")
+include("boundary_conditions.jl")
 include("problem.jl")
 include("equations.jl")
 include("solve.jl")

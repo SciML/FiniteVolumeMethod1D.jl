@@ -12,8 +12,11 @@ reaction_parameters = (1.0, 2.0)
 initial_condition = rand(100)
 initial_time = 0.3
 final_time = 2.8771
+lhs = Dirichlet(0.5)
+rhs = Robin((u, p) -> (0.39u + p, 0.3), 0.5)
 prob = FVMProblem(;
     geometry=geo,
+    boundary_conditions = BoundaryConditions(lhs, rhs),
     diffusion_function=diffusion_function,
     diffusion_parameters=diffusion_parameters,
     reaction_function=reaction_function,
@@ -42,3 +45,9 @@ ode_prob = ODEProblem(prob)
 @test ode_prob.u0 == initial_condition
 @test ode_prob.tspan == (prob.initial_time, final_time)
 @test ode_prob.f.jac_prototype == J
+cb = ode_prob.kwargs.data.callback.discrete_callbacks
+lhs_cb, rhs_cb = cb 
+@test lhs_cb.condition(0.0,0.0,0.0)
+@test !rhs_cb.condition(0.0,0.0,0.0)
+@test lhs_cb.affect! == FVM.update_lhs!
+@test rhs_cb.affect! == FVM.update_rhs!

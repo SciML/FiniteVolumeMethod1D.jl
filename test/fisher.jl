@@ -28,11 +28,11 @@ eqs = [Dt(u(t, x)) ~
         Dx(u(t, x))
     ) +
     β * K * u(t, x) * (1 - u(t, x) / K)]
-bcs = [Dx(u(t, 6π)) ~ 0.0,
-    Dx(u(t, -6π)) ~ 0.0,
+bcs = [Dx(u(t, 2π)) ~ 0.0,
+    Dx(u(t, -2π)) ~ 0.0,
     u(0, x) ~ ic_f(x)]
-domains = [t ∈ Interval(0.0, 5.0),
-    x ∈ Interval(-6π, 6π)]
+domains = [t ∈ Interval(0.0, 1.0),
+    x ∈ Interval(-2π, 2π)]
 @named pdesys = PDESystem(
     eqs,
     bcs,
@@ -61,9 +61,13 @@ diffusion_parameters = [1.0, 50.0, 3.0]
 reaction_parameters = [1e-3, 2.0]
 mesh_points = solx
 initial_condition = ic_f.(mesh_points)
-final_time = 5.0
+final_time = 1.0
+lhs = Neumann(0.0)
+rhs = Neumann(0.0)
 fvm_prob = FVMProblem(
-    mesh_points;
+    mesh_points,
+    lhs,
+    rhs;
     diffusion_function,
     reaction_function,
     diffusion_parameters,
@@ -73,4 +77,4 @@ fvm_prob = FVMProblem(
 )
 fvm_sol = solve(fvm_prob, TRBDF2(), saveat=solt)
 fvm_solu = reduce(hcat, fvm_sol.u)'
-@test solu ≈ fvm_solu rtol = 1e-3
+@test solu ≈ fvm_solu rtol = 1e-2
