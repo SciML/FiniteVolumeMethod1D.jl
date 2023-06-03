@@ -11,7 +11,7 @@ the parameters for `f`.
 A Dirichlet boundary condition takes the form
 
 ```math
-u(a, t) = f(u(a, t), p),
+u(a, t) = f(u(a, t), a, t, p),
 ```
 
 where `a` is one of the endpoints. Note that the `u(a, t)` on the left is the new value, and `u(a, t)` on 
