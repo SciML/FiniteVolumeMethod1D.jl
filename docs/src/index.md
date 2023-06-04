@@ -17,7 +17,6 @@ using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t 
 ```math
 \begin{align*}
 \begin{array}{rrcl}
-\text{Robin}: & a_0\left(u(a, t), t\right) + b_0\left(u(a, t), t\right)\dfrac{\partial u(a, t)}{\partial t} & = & 0, \\[9pt]
 \text{Neumann}: & \dfrac{\partial u(a, t)}{\partial t} & = & a_0\left(u(a, t), t\right), \\[9pt]
 \text{Dirichlet}: & u(a, t) & = & a_0\left(u(a, t), t\right),
 \end{array}
