@@ -31,7 +31,7 @@ You can use the default constructor, but we also provide the constructor
 
 which provides some default values. Moreover, instead of providing `geometry` and `boundary_conditions`, you can use 
 
-    FVMProblem(mesh_points, lhs, lhs; kwargs...)
+    FVMProblem(mesh_points, lhs, rhs; kwargs...)
 
 which will construct `geometry = FVMGeometry(mesh_points)` and `boundary_conditions = BoundaryConditions(lhs, rhs)`. 
 The `kwargs...` are as above, except without `geometry` and `boundary_conditions` of course.
