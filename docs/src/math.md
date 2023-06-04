@@ -8,10 +8,12 @@ In this section, we provide some of the mathematical details for discretising th
 
 ```math
 \begin{align*}
-\dfrac{\partial u}{\partial t} &= \dfrac{\partial}{\partial x}\left(D(u)\dfrac{\partial u}{\partial x}\right) + R(u), & a \leq x \leq b,\, t_0 < t \leq t_1, \\[9pt]
-\dfrac{\partial u(a, t)}{\partial x} = a_0\left(u(a, t), t\right), & t_0 < t \leq t_1, \\[9pt]
-\dfrac{\partial u(b, t)}{\partial x} = a_1\left(u(b, t), t\right), & t_0 < t \leq t_1, \\[9pt]
-u(x, 0) &= f(x), & a \leq x \leq b.
+\begin{array}{rcll}
+\dfrac{\partial u}{\partial t} &=& \dfrac{\partial}{\partial x}\left(D(u)\dfrac{\partial u}{\partial x}\right) + R(u), \quad  &a \leq x \leq b,\, t_0 < t \leq t_1, \\[9pt]
+\dfrac{\partial u(a, t)}{\partial x} &=& a_0\left(u(a, t), t\right), & t_0 < t \leq t_1, \\[9pt]
+\dfrac{\partial u(b, t)}{\partial x} &=& a_1\left(u(b, t), t\right), & t_0 < t \leq t_1, \\[9pt]
+u(x, 0) &=& f(x), & a \leq x \leq b.
+\end{array}
 \end{align*}
 ```
 
