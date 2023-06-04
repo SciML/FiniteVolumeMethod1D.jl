@@ -19,8 +19,8 @@ function pde_odes!(dudt, u, prob::P, t) where {P}
         D̄₁₂ = (D₁ + D₂) / 2
         h₁ = h[1]
         R₁ = R(u[begin], a, t, Rp)
-        a₀, b₀ = get_ab(lhs, u[begin], t)
-        dudt[begin] = inv(V₁) * (D̄₁₂ * ((u[begin+1] - u[begin]) / h₁) + D₁ * a₀ / b₀) + R₁
+        a₀ = lhs(u[begin], t)
+        dudt[begin] = inv(V₁) * (D̄₁₂ * ((u[begin+1] - u[begin]) / h₁) - D₁ * a₀) + R₁
     else
         dudt[begin] = zero(u[begin])
     end
@@ -48,8 +48,8 @@ function pde_odes!(dudt, u, prob::P, t) where {P}
         D̄ₙ₋₁ₙ = (Dₙ₋₁ + Dₙ) / 2
         hₙ₋₁ = h[end]
         Rₙ = R(u[end], b, t, Rp)
-        a₁, b₁ = get_ab(rhs, u[end], t)
-        dudt[end] = -inv(Vₙ) * (Dₙ * a₁ / b₁ + D̄ₙ₋₁ₙ * ((u[end] - u[end-1]) / hₙ₋₁)) + Rₙ
+        a₁ = rhs(u[end], t)
+        dudt[end] = inv(Vₙ) * (Dₙ * a₁ - D̄ₙ₋₁ₙ * ((u[end] - u[end-1]) / hₙ₋₁)) + Rₙ
     else
         dudt[end] = zero(u[end])
     end

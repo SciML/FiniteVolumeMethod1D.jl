@@ -154,18 +154,18 @@ This next problem we consider is a diffusion problem with Robin boundary conditi
 \begin{align*}
 \dfrac{\partial u}{\partial t} & = \frac{1}{25}\dfrac{\partial^2 u}{\partial x^2}, \quad 0 < x < 3,\, t>0, \\[8pt]
 u(0, t) & = 0, \\[8pt]
-\dfrac{\partial u(3, t)}{\partial x} &= -\dfrac{1}{2}u(3, t),\\[8pt] 
+\dfrac{1}{2}u(3, t) + \dfrac{\partial u(3, t)}{\partial x} &= 0,\\[8pt] 
 u(x, 0) & = 100\left(1-\dfrac{x}{3}\right).
 \end{align*}
 ```
 
-Since we assume that Robin boundary conditions take the form $a_0 + b_0\partial u/\partial x = 0$, we will have to rewrite the Robin boundary condition as $(1/2)u(3, t) + \partial u(3, t)/\partial x = 0$. The constructor we use for this is `Robin`, and we now need to provide a function rather than simply a number. The function is assumed to return a `Tuple` of the form `(a, b)`, defining the coefficient $a_0$ or $b_0$, respectively. Thus, our problem can be solved as follows:
+Robin boundary conditions are supported by rewriting them in Neumann form, so that $\partial u(3, t)/\partial x = -u(3, t)/2$ in the above. Thus:
 
 ```julia
 using FiniteVolumeMethod1D
 mesh_points = LinRange(0, 3, 2500)
 lhs = Dirichlet(0.0)
-rhs = Robin((u, t, p) -> (p[1] * u, p[2]), (1 / 2, 1.0))
+rhs = Neumann((u, t, p) -> u * p, -1 / 2)
 diffusion_function = (u, x, t, p) -> p^2
 diffusion_parameters = 1 / 5
 ic = x -> 100(1 - x / 3)

@@ -5,7 +5,7 @@ using SciMLBase
 using CommonSolve
 
 export FVMGeometry, BoundaryConditions, FVMProblem
-export Dirichlet, Neumann, Robin
+export Dirichlet, Neumann
 export solve
 
 include("geometry.jl")

@@ -10,9 +10,8 @@ $$
 \frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left(D(u, x, t)\frac{\partial u}{\partial x}\right) + R(u, x, t)
 $$
 
-using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with support for the following types of boundary conditions (shown at $x = a$, but you can mix boundary condition types, e.g. Neumann at $x=a$ and Robin at $x=b$):
+using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with support for the following types of boundary conditions (shown at $x = a$, but you can mix boundary condition types, e.g. Neumann at $x=a$ and Dirichlet at $x=b$):
 
-- `Robin`: $a_0\left(u(a, t), t\right) + b_0\left(u(a, t), t\right)\dfrac{\partial u(a, t)}{\partial x} = 0$.
 - `Neumann`: $\dfrac{\partial u(a, t)}{\partial x} = a_0\left(u(a, t), t\right)$.
 - `Dirichlet`: $u(a, t) = a_0\left(u(a, t), t\right)$ (this is not an implicit equation for $u(a, t)$, rather $u(a, t)$ is mapped from $a_0\left(u(a, t), a, t\right)$.
 
