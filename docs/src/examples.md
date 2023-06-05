@@ -4,7 +4,7 @@ CurrentModule = FiniteVolumeMethod1D
 
 # Examples 
 
-This section gives some examples for how this package can be used. In most of the examples they follow, there are exact solutions, but we do not discuss them here. You can see the scripts in the tests if you are interested.
+This section gives some examples for how this package can be used. In most of the examples that follow, there are exact solutions, but we do not discuss them here. You can see the scripts in the tests if you are interested.
 
 ## Example I: Heat equation
 
