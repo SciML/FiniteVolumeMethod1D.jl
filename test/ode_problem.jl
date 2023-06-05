@@ -40,7 +40,7 @@ for i in eachindex(mesh_points)
 end
 @test J == _J
 @test Tridiagonal(J) == J
-@test nnz(J) == 3(length(mesh_points) - 2) + 4
+@test nnz(J) == sum(_J) == 3(length(mesh_points) - 2) + 4
 ode_prob = ODEProblem(prob)
 @test ode_prob.p == prob
 @test ode_prob.f.f.f == FVM.pde_odes!
