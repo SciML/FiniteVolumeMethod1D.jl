@@ -70,7 +70,7 @@ is_neumann(::AbstractBoundaryCondition) = false
 is_neumann(::Neumann) = true
 
 """
-    BoundaryConditions{L<:AbstractBoundaryCondition,R<:AbstractBoundaryCondition}
+    BoundaryConditions{L, R}
 
 The boundary conditions for the FVMProblem. 
     
@@ -81,7 +81,7 @@ The boundary conditions for the FVMProblem.
 See also [`Dirichlet`](@ref) and [`Neumann`](@ref) for the types of 
 boundary conditions you can construct.
 """
-Base.@kwdef struct BoundaryConditions{L<:AbstractBoundaryCondition,R<:AbstractBoundaryCondition}
+Base.@kwdef struct BoundaryConditions{L,R}
     lhs::L
     rhs::R
 end
