@@ -15,11 +15,4 @@ using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t 
 - `Neumann`: $\dfrac{\partial u(a, t)}{\partial x} = a_0\left(u(a, t), t\right)$.
 - `Dirichlet`: $u(a, t) = a_0\left(u(a, t), t\right)$ (this is not an implicit equation for $u(a, t)$, rather $u(a, t)$ is mapped from $a_0\left(u(a, t), a, t\right)$.
 
-The package is not registered, so to install it you must do:
-
-```julia-repl
-julia> ] add https://github.com/DanielVandH/FiniteVolumeMethod1D.jl
-julia> using FiniteVolumeMethod1D
-```
-
-For examples on how to use it, please see the docs. If you want a more complete two-dimensional version, please see my other (registered) package [FiniteVolumeMethod.jl](https://github.com/DanielVandH/FiniteVolumeMethod.jl).
+For examples on how to use it, please see the docs. If you want a more complete two-dimensional version, please see my other package [FiniteVolumeMethod.jl](https://github.com/DanielVandH/FiniteVolumeMethod.jl).
