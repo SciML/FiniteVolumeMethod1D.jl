@@ -39,6 +39,9 @@ The `kwargs...` are as above, except without `geometry` and `boundary_conditions
 To solve the `FVMProblem`, just use `solve` as you would in DifferentialEquations.jl. For example, 
 
     sol = solve(prob, Tsit5(), saveat=0.1)
+
+solves the problem with the `Tsit5()` algorithm, saving the solution every `0.1` units of time from `initial_time` up to, 
+and including, `final_time`.
 """
 Base.@kwdef struct FVMProblem{T,DF,DP,RF,RP,L,R,IC,FT}
     geometry::FVMGeometry{T}
