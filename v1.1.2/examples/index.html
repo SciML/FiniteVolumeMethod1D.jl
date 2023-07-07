@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Examples · FiniteVolumeMethod1D.jl</title><script data-outdated-warner src="../assets/warner.js"></script><link rel="canonical" href="https://DanielVandH.github.io/FiniteVolumeMethod1D.jl/examples/"/><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">FiniteVolumeMethod1D.jl</a></span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#Example-I:-Heat-equation"><span>Example I: Heat equation</span></a></li><li><a class="tocitem" href="#Example-II:-Reaction-diffusion-equation"><span>Example II: Reaction-diffusion equation</span></a></li><li><a class="tocitem" href="#Example-III:-Diffusion-problem-with-Robin-boundary-conditions"><span>Example III: Diffusion problem with Robin boundary conditions</span></a></li><li><a class="tocitem" href="#Example-IV:-Porous-Fisher-equation-with-degenerate-diffusion"><span>Example IV: Porous-Fisher equation with degenerate diffusion</span></a></li></ul></li><li><a class="tocitem" href="../math/">Mathematical Details</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/blob/main/docs/src/examples.md#" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><p>This section gives some examples for how this package can be used. In most of the examples that follow, there are exact solutions, but we do not discuss them here. You can see the scripts in the tests if you are interested.</p><h2 id="Example-I:-Heat-equation"><a class="docs-heading-anchor" href="#Example-I:-Heat-equation">Example I: Heat equation</a><a id="Example-I:-Heat-equation-1"></a><a class="docs-heading-anchor-permalink" href="#Example-I:-Heat-equation" title="Permalink"></a></h2><p>We start with a simple example:</p><p class="math-container">\[\begin{align*}
+\dfrac{\partial u}{\partial t} &amp;= \dfrac{\partial^2 u}{\partial x^2}, \quad 0 &lt; x &lt; 1,\,t&gt;0, \\[8pt] 
+\dfrac{\partial u(0, t)}{\partial x} &amp;= 0, \quad t&gt;0, \\[8pt]
+\dfrac{\partial u(1, t)}{\partial x} &amp;= 0, \quad t&gt;0, \\[8pt]
+u(x, 0) &amp; = x, \quad 0 &lt; x &lt; 1.
+\end{align*}\]</p><p>The first step is to define the geometry and the boundary conditions. The geometry for these types of problems simply requires a set of <code>mesh_points</code>, which can be regularly or irregular spaced. Here we use</p><pre><code class="language-julia hljs">mesh_points = LinRange(0, 1, 500)</code></pre><p>We could then use <code>geo = FVMGeometry(mesh_points)</code>, but we will use the simpler constructor for the <code>FVMProblem</code> later. Note that the constructor will take <span>$a=0$</span> and <span>$b=1$</span> from <code>mesh_points[begin]</code> and <code>mesh_points[end]</code>. </p><p>The boundary conditions are defined using the <code>Neumann</code> type. Since the boundary condition is constant in this case, we can use the simpler <code>Neumann(::Number)</code> constructor (see <code>?Neumann</code> for other constructors).</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
+lhs = Neumann(0.0)
+rhs = Neumann(0.0)</code></pre><p>As before, we could then use <code>BoundaryConditions(lhs, rhs)</code>, but we will use the simpler constructor for the <code>FVMProblem</code>. Now, let us define the diffusion function, initial condition, and final time.</p><pre><code class="language-julia hljs">diffusion_function = (u, x, t, p) -&gt; one(u)
+initial_condition = collect(mesh_points)
+final_time = 0.1</code></pre><p>We can now construct the <code>FVMProblem</code>.</p><pre><code class="language-julia hljs">prob = FVMProblem(mesh_points, lhs, rhs;
+    diffusion_function,
+    initial_condition,
+    final_time)</code></pre><p>This <code>prob</code> can be solved the same way as you would e.g. with DifferentialEquations.jl with <code>solve</code>. Using <code>solve</code> returns the same struct as DifferentialEquations.jl returns:</p><pre><code class="language-julia hljs">using OrdinaryDiffEq
+using LinearSolve
+sol = solve(prob, TRBDF2(linsolve=KLUFactorization()))</code></pre><p>This can be easily plotted, e.g.</p><pre><code class="language-julia hljs">using CairoMakie
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;)
+    sol_u = [sol(t) for t in t_range]
+    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig
+end</code></pre><figure>
+    <img src='../figures/heat_contour.png', alt'Contour of the heat equation solution'><br>
+</figure><h2 id="Example-II:-Reaction-diffusion-equation"><a class="docs-heading-anchor" href="#Example-II:-Reaction-diffusion-equation">Example II: Reaction-diffusion equation</a><a id="Example-II:-Reaction-diffusion-equation-1"></a><a class="docs-heading-anchor-permalink" href="#Example-II:-Reaction-diffusion-equation" title="Permalink"></a></h2><p>The next example we consider is a reaction-diffusion equation:</p><p class="math-container">\[\begin{align*}
+\dfrac{\partial u}{\partial t} &amp;= \dfrac{\partial^2 u}{\partial x^2} + \pi^2 \exp[-24\pi^2t]\sin(5\pi x), \quad 0 &lt; x &lt; 1,\, t &gt; 0, \\[8pt]
+u(0, t) &amp;= 0, \\[8pt]
+u(1, t) &amp;= 0, \\[8pt]
+u(x, 0) &amp;= 3\sin(4\pi x).
+\end{align*}\]</p><p>The boundary conditions can be constructed using <code>Dirichlet</code>. So, the geometry and boundary conditions can be given by:</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
+mesh_points = LinRange(0, 1, 500)
+lhs = Dirichlet(0.0)
+rhs = Dirichlet(0.0)</code></pre><p>Now, let us define the diffusion and reaction functions. We show here the use of parameters.</p><pre><code class="language-julia hljs">diffusion_function = (u, x, t, p) -&gt; one(u)
+reaction_function = (u, x, t, p) -&gt; p[1] * exp(-p[2] * t) * sin(p[3] * x)
+reaction_parameters = (π^2, 24π^2, 5π)</code></pre><p>Now the problem can be constructed.</p><pre><code class="language-julia hljs">ic_ff = x -&gt; 3sin(4π*x)
+initial_condition = ic_ff.(mesh_points)
+final_time = 0.05
+prob = FVMProblem(mesh_points, lhs, rhs;
+    diffusion_function,
+    reaction_function,
+    reaction_parameters,
+    initial_condition,
+    final_time)</code></pre><p>Now we solve and plot the solution.</p><pre><code class="language-julia hljs">using OrdinaryDiffEq 
+using LinearSolve 
+sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.001)
+
+using CairoMakie
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    sol_u = [sol(t) for t in t_range]
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig
+end</code></pre><figure>
+    <img src='../figures/dirichlet_source_surface.png', alt'Surface plot of the reaction-diffusion problem'><br>
+</figure><h2 id="Example-III:-Diffusion-problem-with-Robin-boundary-conditions"><a class="docs-heading-anchor" href="#Example-III:-Diffusion-problem-with-Robin-boundary-conditions">Example III: Diffusion problem with Robin boundary conditions</a><a id="Example-III:-Diffusion-problem-with-Robin-boundary-conditions-1"></a><a class="docs-heading-anchor-permalink" href="#Example-III:-Diffusion-problem-with-Robin-boundary-conditions" title="Permalink"></a></h2><p>This next problem we consider is a diffusion problem with Robin boundary conditions:</p><p class="math-container">\[\begin{align*}
+\dfrac{\partial u}{\partial t} &amp; = \frac{1}{25}\dfrac{\partial^2 u}{\partial x^2}, \quad 0 &lt; x &lt; 3,\, t&gt;0, \\[8pt]
+u(0, t) &amp; = 0, \\[8pt]
+\dfrac{1}{2}u(3, t) + \dfrac{\partial u(3, t)}{\partial x} &amp;= 0,\\[8pt] 
+u(x, 0) &amp; = 100\left(1-\dfrac{x}{3}\right).
+\end{align*}\]</p><p>Robin boundary conditions are supported by rewriting them in Neumann form, so that <span>$\partial u(3, t)/\partial x = -u(3, t)/2$</span> in the above. Thus:</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
+mesh_points = LinRange(0, 3, 2500)
+lhs = Dirichlet(0.0)
+rhs = Neumann((u, t, p) -&gt; u * p, -1 / 2)
+diffusion_function = (u, x, t, p) -&gt; p^2
+diffusion_parameters = 1 / 5
+ic = x -&gt; 100(1 - x / 3)
+initial_condition = ic.(mesh_points)
+final_time = 3.0
+prob = FVMProblem(mesh_points, lhs, rhs;
+    diffusion_function,
+    diffusion_parameters,
+    final_time=final_time,
+    initial_condition
+)
+
+using OrdinaryDiffEq 
+using LinearSolve
+sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.01)
+
+using CairoMakie
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    sol_u = [sol(t) for t in t_range]
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig
+end</code></pre><figure>
+    <img src='../figures/robin_diffusion_surface.png', alt'Surface plot of the Robin diffusion problem'><br>
+</figure><h2 id="Example-IV:-Porous-Fisher-equation-with-degenerate-diffusion"><a class="docs-heading-anchor" href="#Example-IV:-Porous-Fisher-equation-with-degenerate-diffusion">Example IV: Porous-Fisher equation with degenerate diffusion</a><a id="Example-IV:-Porous-Fisher-equation-with-degenerate-diffusion-1"></a><a class="docs-heading-anchor-permalink" href="#Example-IV:-Porous-Fisher-equation-with-degenerate-diffusion" title="Permalink"></a></h2><p>We now consider the following problem:</p><p class="math-container">\[\begin{align*}
+\dfrac{\partial u}{\partial t} &amp;= \dfrac{\partial}{\partial x}\left(D(u)\dfrac{\partial u}{\partial x}\right) + R(u), \quad -6\pi &lt; x &lt; 6\pi,\\[8pt] 
+\dfrac{\partial u(-2\pi, t)}{\partial x} &amp; = 0, \\[8pt]
+\dfrac{\partial u(2\pi, t)}{\partial x} &amp; = 0, \\[8pt] 
+u(x, 0) &amp; = \begin{cases} 1 &amp; x &lt; 0, \\ 1/2 &amp; x \geq 0, \end{cases}
+\end{align*}\]</p><p>where <span>$D(u) = 1/(10u) + 50/u^2 + 3/u^3$</span> and <span>$R(u) = \beta K u(1 - u/K)$</span>. We take <span>$\beta = 10^{-3}$</span> and <span>$K = 2$</span>. The problem is solved as follows:</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D 
+mesh_points = LinRange(-2π, 2π, 500)
+lhs = Neumann(0.0)
+rhs = Neumann(0.0)
+diffusion_function = (u, x, t, p) -&gt; inv(p[1] * u) + p[2] * inv(u^2) + p[3] * inv(u^3)
+diffusion_parameters = [1.0, 50.0, 3.0]
+reaction_function = (u, x, t, p) -&gt; p[1] * p[2] * u * (1 - u / p[2])
+reaction_parameters = [1e-3, 2.0]
+ic_f(x) = x &lt; 0 ? 1.0 : 1 / 2
+initial_condition = ic_f.(mesh_points)
+final_time = 1.0
+prob = FVMProblem(
+    mesh_points,
+    lhs,
+    rhs;
+    diffusion_function,
+    reaction_function,
+    diffusion_parameters,
+    reaction_parameters,
+    initial_condition,
+    final_time
+)
+
+using OrdinaryDiffEq 
+sol = solve(fvm_prob, TRBDF2())
+
+using CairoMakie 
+let t_range = LinRange(0.0, final_time, 250)
+    fig = Figure(fontsize=33)
+    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    sol_u = [sol(t) for t in t_range]
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    fig
+end</code></pre><figure>
+    <img src='../figures/fisher_surface.png', alt'Surface plot of the Porous-Fisher problem'><br>
+</figure></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../math/">Mathematical Details »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Friday 7 July 2023 23:56">Friday 7 July 2023</span>. Using Julia version 1.9.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
