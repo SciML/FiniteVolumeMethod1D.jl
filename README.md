@@ -4,6 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://DanielVandH.github.io/FiniteVolumeMethod1D.jl/dev/)
 [![Build Status](https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/DanielVandH/FiniteVolumeMethod1D.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/DanielVandH/FiniteVolumeMethod1D.jl)
+[![DOI](https://zenodo.org/badge/648601161.svg)](https://zenodo.org/badge/latestdoi/648601161)
 
 This is a package for solving equations of the form
 
