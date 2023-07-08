@@ -9,8 +9,8 @@
 	"description": "FiniteVolumeMethod1D.jl: Implementation of the finite volume method in 1D.",
 	"keywords": [
 		"partial-differential-equations",
-    "differential-equations",
-    "one-dimensional"
+    	"differential-equations",
+    	"one-dimensional"
 	],
 	"license": "MIT",
 	"title": "FiniteVolumeMethod1D.jl",
