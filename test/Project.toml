@@ -1,7 +1,6 @@
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 DomainSets = "5b8099bc-c8ec-5219-889f-1d9e522a28bf"
-FiniteVolumeMethod1D = "cfdabe9e-7cc8-40e3-9725-d80209c3e763"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 LinearSolve = "7ed4a6bd-45f5-4d41-b270-4a48e9bafcae"
 MethodOfLines = "94925ecb-adb7-4558-8ed8-f975c56a0bf4"
