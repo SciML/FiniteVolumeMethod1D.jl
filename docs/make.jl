@@ -5,12 +5,12 @@ DocMeta.setdocmeta!(FiniteVolumeMethod1D, :DocTestSetup, :(using FiniteVolumeMet
 
 makedocs(;
     modules=[FiniteVolumeMethod1D],
-    authors="DanielVandH <danj.vandenheuvel@gmail.com> and contributors",
-    repo="https://github.com/DanielVandH/FiniteVolumeMethod1D.jl/blob/{commit}{path}#{line}",
+    authors="SciML <danj.vandenheuvel@gmail.com> and contributors",
+    repo="https://github.com/SciML/FiniteVolumeMethod1D.jl/blob/{commit}{path}#{line}",
     sitename="FiniteVolumeMethod1D.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://DanielVandH.github.io/FiniteVolumeMethod1D.jl",
+        canonical="https://SciML.github.io/FiniteVolumeMethod1D.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -22,6 +22,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/DanielVandH/FiniteVolumeMethod1D.jl",
+    repo="github.com/SciML/FiniteVolumeMethod1D.jl",
     devbranch="main",
 )

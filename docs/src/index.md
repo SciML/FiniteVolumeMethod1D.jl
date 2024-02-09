@@ -4,7 +4,7 @@ CurrentModule = FiniteVolumeMethod1D
 
 # FiniteVolumeMethod1D
 
-Documentation for [FiniteVolumeMethod1D](https://github.com/DanielVandH/FiniteVolumeMethod1D.jl). 
+Documentation for [FiniteVolumeMethod1D](https://github.com/SciML/FiniteVolumeMethod1D.jl). 
 
 This is a package for solving equations of the form
 
@@ -27,7 +27,7 @@ where the Dirichlet condition has $u(a, t)$ mapping from $a_0(u(a, t), t)$ (i.e.
 
 More information is given in the sidebar, and the docstrings are below.
 
-If you want a more complete two-dimensional version, please see my other package [FiniteVolumeMethod.jl](https://github.com/DanielVandH/FiniteVolumeMethod.jl).
+If you want a more complete two-dimensional version, please see my other package [FiniteVolumeMethod.jl](https://github.com/SciML/FiniteVolumeMethod.jl).
 
 ```@index
 ```
