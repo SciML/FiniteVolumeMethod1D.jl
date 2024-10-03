@@ -42,19 +42,19 @@ sol = solve(prob, TRBDF2(); saveat=saveat)
 exact = [exact_solution.(mesh_points, sol.t[i]) for i in eachindex(sol)]
 @test exact ≈ sol.u rtol = 1e-1
 
-fig = Figure(resolution=(2150, 460), fontsize=34)
+fig = Figure(size=(2150, 460), fontsize=34)
 ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"u(x)", title=L"(a):$ $ Numerical solution", titlealign=:left, width=600, height=300)
 colors = [:red, :black, :blue, :darkgreen, :magenta, :orange]
 [lines!(ax, mesh_points, sol.u[i], color=colors[i]) for i in eachindex(sol)]
-ylims!(ax, 0, 5)
+ylims!(ax, -1e-6, 5)
 xlims!(ax, -1, 1)
 ax = Axis(fig[1, 2], xlabel=L"x", ylabel=L"u(x)", title=L"(b):$ $ Exact solution", titlealign=:left, width=600, height=300)
 [lines!(ax, mesh_points, exact[i], color=colors[i]) for i in eachindex(sol)]
-ylims!(ax, 0, 5)
+ylims!(ax, -1e-6, 5)
 xlims!(ax, -1, 1)
 ax = Axis(fig[1, 3], xlabel=L"x", ylabel=L"u(x)", title=L"(c):$ $ Error", titlealign=:left, width=600, height=300)
 [lines!(ax, mesh_points, abs.(exact[i] .- sol.u[i]), color=colors[i]) for i in eachindex(sol)]
-ylims!(ax, 0, 0.5)
+ylims!(ax, -1e-6, 0.5)
 xlims!(ax, -1, 1)
 fig_path = normpath(@__DIR__, "..", "test", "figures")
 @test_reference joinpath(fig_path, "porous_comparison.png") fig
