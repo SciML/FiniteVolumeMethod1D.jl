@@ -1,5 +1,5 @@
-abstract type AbstractBoundaryCondition{F,P} end
-(bc::AbstractBoundaryCondition{F,P})(u, t) where {F,P} = bc.f(u, t, bc.p)
+abstract type AbstractBoundaryCondition{F, P} end
+(bc::AbstractBoundaryCondition{F, P})(u, t) where {F, P} = bc.f(u, t, bc.p)
 
 @doc raw"""
     Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
@@ -22,10 +22,10 @@ where `a` is one of the endpoints.
     Dirichlet(; f, p = nothing)         -> Dirichlet(f, p)
     Dirichlet(v::Number)                -> Dirichlet((u, t, p) -> oftype(u, v), nothing)
 """
-Base.@kwdef struct Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
+Base.@kwdef struct Dirichlet{F, P} <: AbstractBoundaryCondition{F, P}
     f::F
     p::P = nothing
-    Dirichlet(f::F, p::P=nothing) where {F,P} = new{F,P}(f, p)
+    Dirichlet(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
 Dirichlet(f::Function) = Dirichlet(f, nothing)
 Dirichlet(v::Number) =
@@ -54,10 +54,10 @@ where `a` is one of the endpoints.
     Neumann(; f, p = nothing)         -> Neumann(f, p)
     Neumann(v::Number)                -> Neumann((u, t, p) -> oftype(u, v), nothing)
 """
-Base.@kwdef struct Neumann{F,P} <: AbstractBoundaryCondition{F,P}
+Base.@kwdef struct Neumann{F, P} <: AbstractBoundaryCondition{F, P}
     f::F
     p::P = nothing
-    Neumann(f::F, p::P=nothing) where {F,P} = new{F,P}(f, p)
+    Neumann(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
 Neumann(v::Number) =
     let v = v
@@ -72,16 +72,17 @@ is_neumann(::Neumann) = true
 """
     BoundaryConditions{L, R}
 
-The boundary conditions for the FVMProblem. 
-    
-# Fields 
-- `lhs::L`: The left-hand side boundary condition.
-- `rhs::R`: The right-hand side boundary condition.
+The boundary conditions for the FVMProblem.
 
-See also [`Dirichlet`](@ref) and [`Neumann`](@ref) for the types of 
+# Fields
+
+  - `lhs::L`: The left-hand side boundary condition.
+  - `rhs::R`: The right-hand side boundary condition.
+
+See also [`Dirichlet`](@ref) and [`Neumann`](@ref) for the types of
 boundary conditions you can construct.
 """
-Base.@kwdef struct BoundaryConditions{L,R}
+Base.@kwdef struct BoundaryConditions{L, R}
     lhs::L
     rhs::R
 end

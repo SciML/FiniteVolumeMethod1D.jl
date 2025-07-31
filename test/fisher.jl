@@ -24,11 +24,11 @@ Dt = Differential(t)
 Dx = Differential(x)
 Dxx = Differential(x)^2
 eqs = [Dt(u(t, x)) ~
-    Dx(
-        (inv(θ₁ * u(t, x)) + θ₂ * inv(u(t, x)^2) + θ₃ * inv(u(t, x)^3)) *
-        Dx(u(t, x))
-    ) +
-    β * K * u(t, x) * (1 - u(t, x) / K)]
+       Dx(
+    (inv(θ₁ * u(t, x)) + θ₂ * inv(u(t, x)^2) + θ₃ * inv(u(t, x)^3)) *
+    Dx(u(t, x))
+) +
+       β * K * u(t, x) * (1 - u(t, x) / K)]
 bcs = [Dx(u(t, 2π)) ~ 0.0,
     Dx(u(t, -2π)) ~ 0.0,
     u(0, x) ~ ic_f(x)]
@@ -51,7 +51,7 @@ domains = [t ∈ Interval(0.0, 1.0),
 discretisation = MOLFiniteDifference([x => 0.1], t)
 prob = discretize(pdesys, discretisation)
 saveat = 0.1
-sol = solve(prob, Tsit5(), saveat=saveat)
+sol = solve(prob, Tsit5(), saveat = saveat)
 solt = sol[t]
 solx = sol[x]
 solu = sol[u(t, x)]
@@ -76,15 +76,15 @@ fvm_prob = FVMProblem(
     initial_condition,
     final_time
 )
-fvm_sol = solve(fvm_prob, TRBDF2(), saveat=solt)
+fvm_sol = solve(fvm_prob, TRBDF2(), saveat = solt)
 fvm_solu = reduce(hcat, fvm_sol.u)'
 @test solu ≈ fvm_solu rtol = 1e-2
 
 let sol = fvm_sol, t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
     @test_reference joinpath(fig_path, "fisher_surface.png") fig
     fig

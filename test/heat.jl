@@ -24,15 +24,15 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     initial_condition,
     final_time)
 
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()))
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()))
 exact_sol = [exact2.(mesh_points, sol.t[i]) for i in eachindex(sol)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-2
 
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"t")
+    fig = Figure(fontsize = 33)
+    ax = Axis(fig[1, 1], xlabel = L"x", ylabel = L"t")
     sol_u = [sol(t) for t in t_range]
-    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
     @test_reference joinpath(fig_path, "heat_contour.png") fig
     fig

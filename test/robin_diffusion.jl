@@ -18,13 +18,14 @@ function compute_μₙ(n)
     interval = ((2n - 1)π / 6 + 0.001, n * π / 3 - 0.001)
     f = (μₙ, _) -> tan(3μₙ) + 2μₙ
     prob = IntervalNonlinearProblem(f, interval)
-    sol = solve(prob, Ridder(), reltol=1e-9)
+    sol = solve(prob, Ridder(), reltol = 1e-9)
     return sol.u
 end
 function exact_u(x, t, μ)
     u = 0.0
     for (n, μₙ) in enumerate(μ)
-        u += 200 * (3μₙ - sin(3μₙ)) * exp(-μₙ^2 * t / 25) * sin(μₙ * x) / (3μₙ^2 * (3 + 2cos(3μₙ)^2))
+        u += 200 * (3μₙ - sin(3μₙ)) * exp(-μₙ^2 * t / 25) * sin(μₙ * x) /
+             (3μₙ^2 * (3 + 2cos(3μₙ)^2))
     end
     return u
 end
@@ -41,20 +42,20 @@ final_time = 3.0
 prob = FVMProblem(mesh_points, lhs, rhs;
     diffusion_function,
     diffusion_parameters,
-    final_time=final_time,
+    final_time = final_time,
     initial_condition
 )
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat=0.01)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.01)
 
 μ = compute_μₙ.(1:100)
 exact_sol = [exact_u.(mesh_points, sol.t[i], Ref(μ)) for i in eachindex(sol)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-2
 
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth=0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
     @test_reference joinpath(fig_path, "robin_diffusion_surface.png") fig
 end

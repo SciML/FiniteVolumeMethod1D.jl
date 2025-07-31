@@ -2,7 +2,7 @@ using ..FiniteVolumeMethod1D
 using LinearAlgebra
 using LinearSolve
 using OrdinaryDiffEq
-using CairoMakie 
+using CairoMakie
 using ReferenceTests
 
 # p. 145 Constanda 
@@ -30,15 +30,15 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     reaction_parameters,
     initial_condition,
     final_time)
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.001)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
 exact_sol = [exact_u.(mesh_points, sol.t[i]) for i in eachindex(sol)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-1
 
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
     @test_reference joinpath(fig_path, "dirichlet_source_surface.png") fig
     fig

@@ -2,7 +2,7 @@
 CurrentModule = FiniteVolumeMethod1D
 ```
 
-# Examples 
+# Examples
 
 This section gives some examples for how this package can be used. In most of the examples that follow, there are exact solutions, but we do not discuss them here. You can see the scripts in the tests if you are interested.
 
@@ -25,7 +25,7 @@ The first step is to define the geometry and the boundary conditions. The geomet
 mesh_points = LinRange(0, 1, 500)
 ```
 
-We could then use `geo = FVMGeometry(mesh_points)`, but we will use the simpler constructor for the `FVMProblem` later. Note that the constructor will take $a=0$ and $b=1$ from `mesh_points[begin]` and `mesh_points[end]`. 
+We could then use `geo = FVMGeometry(mesh_points)`, but we will use the simpler constructor for the `FVMProblem` later. Note that the constructor will take $a=0$ and $b=1$ from `mesh_points[begin]` and `mesh_points[end]`.
 
 The boundary conditions are defined using the `Neumann` type. Since the boundary condition is constant in this case, we can use the simpler `Neumann(::Number)` constructor (see `?Neumann` for other constructors).
 
@@ -57,7 +57,7 @@ This `prob` can be solved the same way as you would e.g. with DifferentialEquati
 ```julia
 using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()))
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()))
 ```
 
 This can be easily plotted, e.g.
@@ -65,10 +65,10 @@ This can be easily plotted, e.g.
 ```julia
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis(fig[1, 1], xlabel=L"x", ylabel=L"t")
+    fig = Figure(fontsize = 33)
+    ax = Axis(fig[1, 1], xlabel = L"x", ylabel = L"t")
     sol_u = [sol(t) for t in t_range]
-    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end
 ```
@@ -126,16 +126,16 @@ prob = FVMProblem(mesh_points, lhs, rhs;
 Now we solve and plot the solution.
 
 ```julia
-using OrdinaryDiffEq 
-using LinearSolve 
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.001)
+using OrdinaryDiffEq
+using LinearSolve
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end
 ```
@@ -146,7 +146,7 @@ end
 </figure>
 ```
 
-## Example III: Diffusion problem with Robin boundary conditions 
+## Example III: Diffusion problem with Robin boundary conditions
 
 This next problem we consider is a diffusion problem with Robin boundary conditions:
 
@@ -174,20 +174,20 @@ final_time = 3.0
 prob = FVMProblem(mesh_points, lhs, rhs;
     diffusion_function,
     diffusion_parameters,
-    final_time=final_time,
+    final_time = final_time,
     initial_condition
 )
 
-using OrdinaryDiffEq 
+using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.01)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.01)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end
 ```
@@ -214,7 +214,7 @@ u(x, 0) & = \begin{cases} 1 & x < 0, \\ 1/2 & x \geq 0, \end{cases}
 where $D(u) = 1/(10u) + 50/u^2 + 3/u^3$ and $R(u) = \beta K u(1 - u/K)$. We take $\beta = 10^{-3}$ and $K = 2$. The problem is solved as follows:
 
 ```julia
-using FiniteVolumeMethod1D 
+using FiniteVolumeMethod1D
 mesh_points = LinRange(-2π, 2π, 500)
 lhs = Neumann(0.0)
 rhs = Neumann(0.0)
@@ -237,15 +237,15 @@ prob = FVMProblem(
     final_time
 )
 
-using OrdinaryDiffEq 
+using OrdinaryDiffEq
 sol = solve(fvm_prob, TRBDF2())
 
-using CairoMakie 
+using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L"x", ylabel=L"t", zlabel=L"z", azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L"x", ylabel = L"t", zlabel = L"z", azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end
 ```
