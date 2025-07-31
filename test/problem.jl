@@ -12,14 +12,14 @@ lhs = Dirichlet((u, t, p) -> 0.39u + p, 0.5)
 rhs = Neumann((u, t, p) -> 5.8)
 boundary_conditions = BoundaryConditions(lhs, rhs)
 prob = FVMProblem(;
-    geometry=geo,
-    boundary_conditions=boundary_conditions,
-    diffusion_function=diffusion_function,
-    diffusion_parameters=diffusion_parameters,
-    reaction_function=reaction_function,
-    reaction_parameters=reaction_parameters,
-    initial_condition=initial_condition,
-    final_time=final_time)
+    geometry = geo,
+    boundary_conditions = boundary_conditions,
+    diffusion_function = diffusion_function,
+    diffusion_parameters = diffusion_parameters,
+    reaction_function = reaction_function,
+    reaction_parameters = reaction_parameters,
+    initial_condition = initial_condition,
+    final_time = final_time)
 @test prob.geometry == geo
 @test prob.boundary_conditions == boundary_conditions
 @test prob.boundary_conditions.lhs == lhs
@@ -33,13 +33,13 @@ prob = FVMProblem(;
 @test prob.initial_time == 0.0
 
 prob = FVMProblem(mesh_points, lhs, rhs;
-    diffusion_function=diffusion_function,
-    diffusion_parameters=diffusion_parameters,
-    reaction_function=reaction_function,
-    reaction_parameters=reaction_parameters,
-    initial_condition=initial_condition,
-    final_time=final_time,
-    initial_time=0.2)
+    diffusion_function = diffusion_function,
+    diffusion_parameters = diffusion_parameters,
+    reaction_function = reaction_function,
+    reaction_parameters = reaction_parameters,
+    initial_condition = initial_condition,
+    final_time = final_time,
+    initial_time = 0.2)
 @test prob.geometry.mesh_points == geo.mesh_points
 @test prob.geometry.spacings == geo.spacings
 @test prob.geometry.volumes == geo.volumes

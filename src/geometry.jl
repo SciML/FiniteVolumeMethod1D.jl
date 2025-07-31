@@ -4,13 +4,14 @@
 Definition of the geometry for a finite volume method problem.
 
 # Fields
-- `mesh_points::T`: The mesh points. Must be sorted.
-- `spacings::T`: The spacings between the mesh points. 
-- `volumes::T`: The volumes of the cells defined by the mesh points.
+
+  - `mesh_points::T`: The mesh points. Must be sorted.
+  - `spacings::T`: The spacings between the mesh points.
+  - `volumes::T`: The volumes of the cells defined by the mesh points.
 
 # Constructors
 
-To construct the geometry, you can directly call the default constructor, 
+To construct the geometry, you can directly call the default constructor,
 
     FVMGeometry(mesh_points, spacings, volumes)
 
@@ -46,8 +47,8 @@ function compute_volumes(mesh_points, spacings)
     V = similar(mesh_points)
     V[begin] = 0.5spacings[begin]
     V[end] = 0.5spacings[end]
-    for i in (firstindex(mesh_points)+1):(lastindex(mesh_points)-1)
-        V[i] = 0.5 * (spacings[i-1] + spacings[i])
+    for i in (firstindex(mesh_points) + 1):(lastindex(mesh_points) - 1)
+        V[i] = 0.5 * (spacings[i - 1] + spacings[i])
     end
     return V
 end

@@ -4,7 +4,7 @@ CurrentModule = FiniteVolumeMethod1D
 
 # FiniteVolumeMethod1D
 
-Documentation for [FiniteVolumeMethod1D](https://github.com/SciML/FiniteVolumeMethod1D.jl). 
+Documentation for [FiniteVolumeMethod1D](https://github.com/SciML/FiniteVolumeMethod1D.jl).
 
 This is a package for solving equations of the form
 
