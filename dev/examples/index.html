@@ -4,7 +4,7 @@
 \dfrac{\partial u(0, t)}{\partial x} &amp;= 0, \quad t&gt;0, \\[8pt]
 \dfrac{\partial u(1, t)}{\partial x} &amp;= 0, \quad t&gt;0, \\[8pt]
 u(x, 0) &amp; = x, \quad 0 &lt; x &lt; 1.
-\end{align*}\]</p><p>The first step is to define the geometry and the boundary conditions. The geometry for these types of problems simply requires a set of <code>mesh_points</code>, which can be regularly or irregular spaced. Here we use</p><pre><code class="language-julia hljs">mesh_points = LinRange(0, 1, 500)</code></pre><p>We could then use <code>geo = FVMGeometry(mesh_points)</code>, but we will use the simpler constructor for the <code>FVMProblem</code> later. Note that the constructor will take <span>$a=0$</span> and <span>$b=1$</span> from <code>mesh_points[begin]</code> and <code>mesh_points[end]</code>. </p><p>The boundary conditions are defined using the <code>Neumann</code> type. Since the boundary condition is constant in this case, we can use the simpler <code>Neumann(::Number)</code> constructor (see <code>?Neumann</code> for other constructors).</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
+\end{align*}\]</p><p>The first step is to define the geometry and the boundary conditions. The geometry for these types of problems simply requires a set of <code>mesh_points</code>, which can be regularly or irregular spaced. Here we use</p><pre><code class="language-julia hljs">mesh_points = LinRange(0, 1, 500)</code></pre><p>We could then use <code>geo = FVMGeometry(mesh_points)</code>, but we will use the simpler constructor for the <code>FVMProblem</code> later. Note that the constructor will take <span>$a=0$</span> and <span>$b=1$</span> from <code>mesh_points[begin]</code> and <code>mesh_points[end]</code>.</p><p>The boundary conditions are defined using the <code>Neumann</code> type. Since the boundary condition is constant in this case, we can use the simpler <code>Neumann(::Number)</code> constructor (see <code>?Neumann</code> for other constructors).</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
 lhs = Neumann(0.0)
 rhs = Neumann(0.0)</code></pre><p>As before, we could then use <code>BoundaryConditions(lhs, rhs)</code>, but we will use the simpler constructor for the <code>FVMProblem</code>. Now, let us define the diffusion function, initial condition, and final time.</p><pre><code class="language-julia hljs">diffusion_function = (u, x, t, p) -&gt; one(u)
 initial_condition = collect(mesh_points)
@@ -13,12 +13,12 @@ final_time = 0.1</code></pre><p>We can now construct the <code>FVMProblem</code>
     initial_condition,
     final_time)</code></pre><p>This <code>prob</code> can be solved the same way as you would e.g. with DifferentialEquations.jl with <code>solve</code>. Using <code>solve</code> returns the same struct as DifferentialEquations.jl returns:</p><pre><code class="language-julia hljs">using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()))</code></pre><p>This can be easily plotted, e.g.</p><pre><code class="language-julia hljs">using CairoMakie
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()))</code></pre><p>This can be easily plotted, e.g.</p><pre><code class="language-julia hljs">using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;)
+    fig = Figure(fontsize = 33)
+    ax = Axis(fig[1, 1], xlabel = L&quot;x&quot;, ylabel = L&quot;t&quot;)
     sol_u = [sol(t) for t in t_range]
-    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    contourf!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end</code></pre><figure>
     <img src='../figures/heat_contour.png', alt'Contour of the heat equation solution'><br>
@@ -40,16 +40,16 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     reaction_function,
     reaction_parameters,
     initial_condition,
-    final_time)</code></pre><p>Now we solve and plot the solution.</p><pre><code class="language-julia hljs">using OrdinaryDiffEq 
-using LinearSolve 
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.001)
+    final_time)</code></pre><p>Now we solve and plot the solution.</p><pre><code class="language-julia hljs">using OrdinaryDiffEq
+using LinearSolve
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L&quot;x&quot;, ylabel = L&quot;t&quot;, zlabel = L&quot;z&quot;, azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end</code></pre><figure>
     <img src='../figures/dirichlet_source_surface.png', alt'Surface plot of the reaction-diffusion problem'><br>
@@ -70,20 +70,20 @@ final_time = 3.0
 prob = FVMProblem(mesh_points, lhs, rhs;
     diffusion_function,
     diffusion_parameters,
-    final_time=final_time,
+    final_time = final_time,
     initial_condition
 )
 
-using OrdinaryDiffEq 
+using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve=KLUFactorization()), saveat = 0.01)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.01)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L&quot;x&quot;, ylabel = L&quot;t&quot;, zlabel = L&quot;z&quot;, azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end</code></pre><figure>
     <img src='../figures/robin_diffusion_surface.png', alt'Surface plot of the Robin diffusion problem'><br>
@@ -92,7 +92,7 @@ end</code></pre><figure>
 \dfrac{\partial u(-2\pi, t)}{\partial x} &amp; = 0, \\[8pt]
 \dfrac{\partial u(2\pi, t)}{\partial x} &amp; = 0, \\[8pt] 
 u(x, 0) &amp; = \begin{cases} 1 &amp; x &lt; 0, \\ 1/2 &amp; x \geq 0, \end{cases}
-\end{align*}\]</p><p>where <span>$D(u) = 1/(10u) + 50/u^2 + 3/u^3$</span> and <span>$R(u) = \beta K u(1 - u/K)$</span>. We take <span>$\beta = 10^{-3}$</span> and <span>$K = 2$</span>. The problem is solved as follows:</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D 
+\end{align*}\]</p><p>where <span>$D(u) = 1/(10u) + 50/u^2 + 3/u^3$</span> and <span>$R(u) = \beta K u(1 - u/K)$</span>. We take <span>$\beta = 10^{-3}$</span> and <span>$K = 2$</span>. The problem is solved as follows:</p><pre><code class="language-julia hljs">using FiniteVolumeMethod1D
 mesh_points = LinRange(-2π, 2π, 500)
 lhs = Neumann(0.0)
 rhs = Neumann(0.0)
@@ -115,16 +115,16 @@ prob = FVMProblem(
     final_time
 )
 
-using OrdinaryDiffEq 
+using OrdinaryDiffEq
 sol = solve(fvm_prob, TRBDF2())
 
-using CairoMakie 
+using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
-    fig = Figure(fontsize=33)
-    ax = Axis3(fig[1, 1], xlabel=L&quot;x&quot;, ylabel=L&quot;t&quot;, zlabel=L&quot;z&quot;, azimuth = 0.8)
+    fig = Figure(fontsize = 33)
+    ax = Axis3(fig[1, 1], xlabel = L&quot;x&quot;, ylabel = L&quot;t&quot;, zlabel = L&quot;z&quot;, azimuth = 0.8)
     sol_u = [sol(t) for t in t_range]
-    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap=:viridis)
+    surface!(ax, mesh_points, t_range, reduce(hcat, sol_u), colormap = :viridis)
     fig
 end</code></pre><figure>
     <img src='../figures/fisher_surface.png', alt'Surface plot of the Porous-Fisher problem'><br>
-</figure></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../math/">Mathematical Details »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Thursday 3 October 2024 15:40">Thursday 3 October 2024</span>. Using Julia version 1.10.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</figure></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../math/">Mathematical Details »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Friday 1 August 2025 09:37">Friday 1 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
