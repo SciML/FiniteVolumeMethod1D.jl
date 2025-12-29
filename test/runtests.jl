@@ -3,6 +3,9 @@ using Test
 using SafeTestsets
 
 @testset "FiniteVolumeMethod1D" begin
+    @safetestset "Explicit Imports" begin
+        include("explicit_imports.jl")
+    end
     @safetestset "FVMGeometry" begin
         include("geometry.jl")
     end
