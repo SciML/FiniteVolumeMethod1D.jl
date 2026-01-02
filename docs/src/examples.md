@@ -238,7 +238,7 @@ prob = FVMProblem(
 )
 
 using OrdinaryDiffEq
-sol = solve(fvm_prob, TRBDF2())
+sol = solve(prob, TRBDF2())
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
