@@ -18,14 +18,14 @@ function compute_μₙ(n)
     interval = ((2n - 1)π / 6 + 0.001, n * π / 3 - 0.001)
     f = (μₙ, _) -> tan(3μₙ) + 2μₙ
     prob = IntervalNonlinearProblem(f, interval)
-    sol = solve(prob, Ridder(), reltol = 1e-9)
+    sol = solve(prob, Ridder(), reltol = 1.0e-9)
     return sol.u
 end
 function exact_u(x, t, μ)
     u = 0.0
     for (n, μₙ) in enumerate(μ)
         u += 200 * (3μₙ - sin(3μₙ)) * exp(-μₙ^2 * t / 25) * sin(μₙ * x) /
-             (3μₙ^2 * (3 + 2cos(3μₙ)^2))
+            (3μₙ^2 * (3 + 2cos(3μₙ)^2))
     end
     return u
 end
@@ -39,7 +39,8 @@ diffusion_parameters = c
 ic = x -> 100(1 - x / 3)
 initial_condition = ic.(mesh_points)
 final_time = 3.0
-prob = FVMProblem(mesh_points, lhs, rhs;
+prob = FVMProblem(
+    mesh_points, lhs, rhs;
     diffusion_function,
     diffusion_parameters,
     final_time = final_time,
@@ -49,7 +50,7 @@ sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.01)
 
 μ = compute_μₙ.(1:100)
 exact_sol = [exact_u.(mesh_points, sol.t[i], Ref(μ)) for i in eachindex(sol)]
-@test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-2
+@test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1.0e-2
 
 let t_range = LinRange(0.0, final_time, 250)
     fig = Figure(fontsize = 33)

@@ -19,7 +19,8 @@ prob = FVMProblem(;
     reaction_function = reaction_function,
     reaction_parameters = reaction_parameters,
     initial_condition = initial_condition,
-    final_time = final_time)
+    final_time = final_time
+)
 @test prob.geometry == geo
 @test prob.boundary_conditions == boundary_conditions
 @test prob.boundary_conditions.lhs == lhs
@@ -32,14 +33,16 @@ prob = FVMProblem(;
 @test prob.final_time == final_time
 @test prob.initial_time == 0.0
 
-prob = FVMProblem(mesh_points, lhs, rhs;
+prob = FVMProblem(
+    mesh_points, lhs, rhs;
     diffusion_function = diffusion_function,
     diffusion_parameters = diffusion_parameters,
     reaction_function = reaction_function,
     reaction_parameters = reaction_parameters,
     initial_condition = initial_condition,
     final_time = final_time,
-    initial_time = 0.2)
+    initial_time = 0.2
+)
 @test prob.geometry.mesh_points == geo.mesh_points
 @test prob.geometry.spacings == geo.spacings
 @test prob.geometry.volumes == geo.volumes

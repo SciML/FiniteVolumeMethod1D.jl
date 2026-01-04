@@ -37,10 +37,12 @@ function pde_odes!(dudt, u, prob::P, t) where {P}
         hᵢ = h[i]
         hᵢ₋₁ = h[i - 1]
         Rᵢ = R(u[i], xᵢ, t, Rp)
-        dudt[i] = inv(Vᵢ) * (D̄ᵢᵢ₊₁ * ((u[i + 1] - u[i]) / hᵢ) -
-                   D̄ᵢ₋₁ᵢ * ((u[i] - u[i - 1]) / hᵢ₋₁)) + Rᵢ
+        dudt[i] = inv(Vᵢ) * (
+            D̄ᵢᵢ₊₁ * ((u[i + 1] - u[i]) / hᵢ) -
+                D̄ᵢ₋₁ᵢ * ((u[i] - u[i - 1]) / hᵢ₋₁)
+        ) + Rᵢ
     end
-    if !is_dirichlet(rhs)
+    return if !is_dirichlet(rhs)
         b = mesh_points[end]
         xₙ₋₁ = mesh_points[end - 1]
         Vₙ = V[end]
@@ -58,16 +60,16 @@ end
 
 jacobian_sparsity(prob::FVMProblem) = jacobian_sparsity(prob.geometry.mesh_points)
 function jacobian_sparsity(pts)
-    num_nnz = 3(length(pts) - 2) + 4 # 3 neighbours for each interior node, 2 from each boundary node 
+    num_nnz = 3(length(pts) - 2) + 4 # 3 neighbours for each interior node, 2 from each boundary node
     I = zeros(Int64, num_nnz)
     J = zeros(Int64, num_nnz)
     V = ones(num_nnz)
-    # The left boundary node 
+    # The left boundary node
     I[1] = firstindex(pts)
     J[1] = firstindex(pts)
     I[2] = firstindex(pts)
     J[2] = firstindex(pts) + 1
-    # The interior nodes 
+    # The interior nodes
     ctr = 3
     for i in (firstindex(pts) + 1):(lastindex(pts) - 1)
         I[ctr] = i
@@ -80,7 +82,7 @@ function jacobian_sparsity(pts)
         J[ctr] = i - 1
         ctr += 1
     end
-    # The right boundary node 
+    # The right boundary node
     I[ctr] = lastindex(pts)
     J[ctr] = lastindex(pts)
     ctr += 1

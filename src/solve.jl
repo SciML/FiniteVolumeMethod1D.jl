@@ -1,7 +1,9 @@
-function SciMLBase.ODEProblem(prob::FVMProblem;
+function SciMLBase.ODEProblem(
+        prob::FVMProblem;
         specialization::Type{S} = SciMLBase.AutoSpecialize,
         jac_prototype = jacobian_sparsity(prob),
-        kwargs...) where {S}
+        kwargs...
+    ) where {S}
     initial_time = prob.initial_time
     final_time = prob.final_time
     time_span = (initial_time, final_time)
@@ -12,7 +14,8 @@ function SciMLBase.ODEProblem(prob::FVMProblem;
     cb = CallbackSet(lhs_cb, rhs_cb)
     f = ODEFunction{true, S}(pde_odes!; jac_prototype = jac_prototype)
     ode_problem = ODEProblem{true, S}(
-        f, initial_condition, time_span, prob; callback = cb, kwargs...)
+        f, initial_condition, time_span, prob; callback = cb, kwargs...
+    )
     return ode_problem
 end
 
@@ -60,5 +63,5 @@ function update_rhs!(integrator)
 end
 
 function CommonSolve.init(prob::FVMProblem, alg; kwargs...)
-    CommonSolve.init(ODEProblem(prob; kwargs...), alg; kwargs...)
+    return CommonSolve.init(ODEProblem(prob; kwargs...), alg; kwargs...)
 end

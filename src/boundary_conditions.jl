@@ -29,9 +29,9 @@ Base.@kwdef struct Dirichlet{F, P} <: AbstractBoundaryCondition{F, P}
 end
 Dirichlet(f::Function) = Dirichlet(f, nothing)
 Dirichlet(v::Number) =
-    let v = v
-        Dirichlet((u, t, p) -> oftype(u, v))
-    end
+let v = v
+    Dirichlet((u, t, p) -> oftype(u, v))
+end
 
 @doc raw"""
     Neumann{F,P} <: AbstractBoundaryCondition{F,P}
@@ -60,9 +60,9 @@ Base.@kwdef struct Neumann{F, P} <: AbstractBoundaryCondition{F, P}
     Neumann(f::F, p::P = nothing) where {F, P} = new{F, P}(f, p)
 end
 Neumann(v::Number) =
-    let v = v
-        Neumann((u, t, p) -> oftype(u, v))
-    end
+let v = v
+    Neumann((u, t, p) -> oftype(u, v))
+end
 
 is_dirichlet(::AbstractBoundaryCondition) = false
 is_dirichlet(::Dirichlet) = true
