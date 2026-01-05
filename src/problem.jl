@@ -56,8 +56,9 @@ Base.@kwdef struct FVMProblem{T, DF, DP, RF, RP, L, R, IC, FT}
     final_time::FT
 end
 function FVMProblem(mesh_points, lhs, rhs; kwargs...)
-    FVMProblem(;
+    return FVMProblem(;
         geometry = FVMGeometry(mesh_points),
         boundary_conditions = BoundaryConditions(lhs, rhs),
-        kwargs...)
+        kwargs...
+    )
 end

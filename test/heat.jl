@@ -19,14 +19,16 @@ rhs = Neumann(0.0)
 diffusion_function = (u, x, t, p) -> one(u)
 initial_condition = collect(mesh_points)
 final_time = 0.25
-prob = FVMProblem(mesh_points, lhs, rhs;
+prob = FVMProblem(
+    mesh_points, lhs, rhs;
     diffusion_function,
     initial_condition,
-    final_time)
+    final_time
+)
 
 sol = solve(prob, TRBDF2(linsolve = KLUFactorization()))
 exact_sol = [exact2.(mesh_points, sol.t[i]) for i in eachindex(sol)]
-@test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1e-2
+@test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1.0e-2
 
 let t_range = LinRange(0.0, final_time, 250)
     fig = Figure(fontsize = 33)

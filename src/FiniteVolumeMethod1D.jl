@@ -1,8 +1,8 @@
 module FiniteVolumeMethod1D
 
-using SparseArrays
-using SciMLBase
-using CommonSolve
+using CommonSolve: CommonSolve, solve
+using SciMLBase: SciMLBase, CallbackSet, DiscreteCallback, ODEFunction, ODEProblem
+using SparseArrays: sparse
 
 export FVMGeometry, BoundaryConditions, FVMProblem
 export Dirichlet, Neumann
@@ -25,4 +25,4 @@ include("solve.jl")
     (obj::Returns)(@nospecialize(args...); @nospecialize(kw...)) = obj.value
 end
 
-end # module 
+end # module

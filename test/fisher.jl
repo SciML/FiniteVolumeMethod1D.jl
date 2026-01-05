@@ -23,17 +23,23 @@ ic_f(x) = x < 0 ? 1.0 : 1 / 2
 Dt = Differential(t)
 Dx = Differential(x)
 Dxx = Differential(x)^2
-eqs = [Dt(u(t, x)) ~
-       Dx(
-    (inv(θ₁ * u(t, x)) + θ₂ * inv(u(t, x)^2) + θ₃ * inv(u(t, x)^3)) *
-    Dx(u(t, x))
-) +
-       β * K * u(t, x) * (1 - u(t, x) / K)]
-bcs = [Dx(u(t, 2π)) ~ 0.0,
+eqs = [
+    Dt(u(t, x)) ~
+        Dx(
+        (inv(θ₁ * u(t, x)) + θ₂ * inv(u(t, x)^2) + θ₃ * inv(u(t, x)^3)) *
+            Dx(u(t, x))
+    ) +
+        β * K * u(t, x) * (1 - u(t, x) / K),
+]
+bcs = [
+    Dx(u(t, 2π)) ~ 0.0,
     Dx(u(t, -2π)) ~ 0.0,
-    u(0, x) ~ ic_f(x)]
-domains = [t ∈ Interval(0.0, 1.0),
-    x ∈ Interval(-2π, 2π)]
+    u(0, x) ~ ic_f(x),
+]
+domains = [
+    t ∈ Interval(0.0, 1.0),
+    x ∈ Interval(-2π, 2π),
+]
 @named pdesys = PDESystem(
     eqs,
     bcs,
@@ -44,8 +50,8 @@ domains = [t ∈ Interval(0.0, 1.0),
         θ₁ => 1.0,
         θ₂ => 50.0,
         θ₃ => 3.0,
-        β => 1e-3,
-        K => 2.0
+        β => 1.0e-3,
+        K => 2.0,
     ]
 )
 discretisation = MOLFiniteDifference([x => 0.1], t)
@@ -59,7 +65,7 @@ solu = sol[u(t, x)]
 diffusion_function = (u, x, t, p) -> inv(p[1] * u) + p[2] * inv(u^2) + p[3] * inv(u^3)
 reaction_function = (u, x, t, p) -> p[1] * p[2] * u * (1 - u / p[2])
 diffusion_parameters = [1.0, 50.0, 3.0]
-reaction_parameters = [1e-3, 2.0]
+reaction_parameters = [1.0e-3, 2.0]
 mesh_points = solx
 initial_condition = ic_f.(mesh_points)
 final_time = 1.0
@@ -78,7 +84,7 @@ fvm_prob = FVMProblem(
 )
 fvm_sol = solve(fvm_prob, TRBDF2(), saveat = solt)
 fvm_solu = reduce(hcat, fvm_sol.u)'
-@test solu ≈ fvm_solu rtol = 1e-2
+@test solu ≈ fvm_solu rtol = 1.0e-2
 
 let sol = fvm_sol, t_range = LinRange(0.0, final_time, 250)
     fig = Figure(fontsize = 33)

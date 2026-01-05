@@ -9,7 +9,7 @@ Documentation for [FiniteVolumeMethod1D](https://github.com/SciML/FiniteVolumeMe
 This is a package for solving equations of the form
 
 ```math
-\dfrac{\partial u(x, t)}{\partial x} = \dfrac{\partial}{\partial x}\left(D\left(u, x, t\right)\dfrac{\partial u(x, t)}{\partial x}\right) + R(u, x, t),
+\dfrac{\partial u(x, t)}{\partial t} = \dfrac{\partial}{\partial x}\left(D\left(u, x, t\right)\dfrac{\partial u(x, t)}{\partial x}\right) + R(u, x, t),
 ```
 
 using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t \leq t_1$, with support for the following types of boundary conditions (shown at $x = a$, but you can mix boundary condition types, e.g. Neumann at $x=a$ and Robin at $x=b$):
@@ -17,7 +17,7 @@ using the finite volume method over intervals $a \leq x \leq b$ and $t_0 \leq t 
 ```math
 \begin{align*}
 \begin{array}{rrcl}
-\text{Neumann}: & \dfrac{\partial u(a, t)}{\partial t} & = & a_0\left(u(a, t), t\right), \\[9pt]
+\text{Neumann}: & \dfrac{\partial u(a, t)}{\partial x} & = & a_0\left(u(a, t), t\right), \\[9pt]
 \text{Dirichlet}: & u(a, t) & = & a_0\left(u(a, t), t\right),
 \end{array}
 \end{align*}
