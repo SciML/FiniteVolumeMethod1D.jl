@@ -24,7 +24,8 @@ prob = FVMProblem(;
     reaction_parameters = reaction_parameters,
     initial_condition = initial_condition,
     final_time = final_time,
-    initial_time = initial_time)
+    initial_time = initial_time
+)
 J = FVM.jacobian_sparsity(prob)
 @test J == FVM.jacobian_sparsity(mesh_points)
 _J = zeros(length(mesh_points), length(mesh_points))

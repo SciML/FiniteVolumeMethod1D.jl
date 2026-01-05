@@ -25,4 +25,4 @@ include("solve.jl")
     (obj::Returns)(@nospecialize(args...); @nospecialize(kw...)) = obj.value
 end
 
-end # module 
+end # module
