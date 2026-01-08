@@ -25,4 +25,6 @@ include("solve.jl")
     (obj::Returns)(@nospecialize(args...); @nospecialize(kw...)) = obj.value
 end
 
+include("precompilation.jl")
+
 end # module
