@@ -1,4 +1,4 @@
-using PrecompileTools
+using PrecompileTools: @setup_workload, @compile_workload
 
 @setup_workload begin
     # Minimal setup - these are lightweight and don't add much to precompilation time

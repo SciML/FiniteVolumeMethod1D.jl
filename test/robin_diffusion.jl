@@ -50,7 +50,7 @@ prob = FVMProblem(
 sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.01)
 
 μ = compute_μₙ.(1:100)
-exact_sol = [exact_u.(mesh_points, sol.t[i], Ref(μ)) for i in eachindex(sol)]
+exact_sol = [exact_u.(mesh_points, sol.t[i], Ref(μ)) for i in eachindex(sol.t)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1.0e-2
 
 let t_range = LinRange(0.0, final_time, 250)
