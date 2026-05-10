@@ -2,6 +2,7 @@ using ..FiniteVolumeMethod1D
 using LinearAlgebra
 using LinearSolve
 using OrdinaryDiffEq
+using OrdinaryDiffEqSDIRK
 using CairoMakie
 using ReferenceTests
 

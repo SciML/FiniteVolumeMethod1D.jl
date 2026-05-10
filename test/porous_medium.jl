@@ -1,5 +1,6 @@
 using ..FiniteVolumeMethod1D
 using OrdinaryDiffEq
+using OrdinaryDiffEqSDIRK
 using CairoMakie
 using ReferenceTests
 using SpecialFunctions
