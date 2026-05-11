@@ -42,7 +42,8 @@ prob = FVMProblem(mesh_points, lhs, rhs;
     initial_condition,
     final_time)</code></pre><p>Now we solve and plot the solution.</p><pre><code class="language-julia hljs">using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001,
+    abstol = 1.0e-10, reltol = 1.0e-8)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)
@@ -127,4 +128,4 @@ let t_range = LinRange(0.0, final_time, 250)
     fig
 end</code></pre><figure>
     <img src='../figures/fisher_surface.png', alt'Surface plot of the Porous-Fisher problem'><br>
-</figure></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../math/">Mathematical Details »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.25 on <span class="colophon-date" title="Sunday 10 May 2026 11:25">Sunday 10 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</figure></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../math/">Mathematical Details »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.25 on <span class="colophon-date" title="Monday 11 May 2026 18:00">Monday 11 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
