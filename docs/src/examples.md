@@ -128,7 +128,8 @@ Now we solve and plot the solution.
 ```julia
 using OrdinaryDiffEq
 using LinearSolve
-sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
+sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001,
+    abstol = 1.0e-10, reltol = 1.0e-8)
 
 using CairoMakie
 let t_range = LinRange(0.0, final_time, 250)

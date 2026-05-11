@@ -1,6 +1,7 @@
 using ..FiniteVolumeMethod1D
 using MethodOfLines
 using OrdinaryDiffEq
+using OrdinaryDiffEqSDIRK
 using ReferenceTests
 using CairoMakie
 using ModelingToolkit
