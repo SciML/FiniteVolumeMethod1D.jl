@@ -33,7 +33,15 @@ prob = FVMProblem(
     initial_condition,
     final_time
 )
-sol = solve(prob, TRBDF2(linsolve = KLUFactorization()), saveat = 0.001)
+# The analytical solution involves exp(-16π² t) and exp(-25π² t) terms, which decay
+# to O(1e-3) by t = 0.05. Default solver tolerances (abstol = 1e-6, reltol = 1e-3)
+# do not resolve those small values accurately, leaving residuals comparable to the
+# signal itself. Tighten the tolerances so the comparison against the closed-form
+# exact_u is meaningful.
+sol = solve(
+    prob, TRBDF2(linsolve = KLUFactorization()),
+    saveat = 0.001, abstol = 1.0e-10, reltol = 1.0e-8
+)
 exact_sol = [exact_u.(mesh_points, sol.t[i]) for i in eachindex(sol.t)]
 @test reduce(hcat, sol.u) ≈ reduce(hcat, exact_sol) rtol = 1.0e-1
 
