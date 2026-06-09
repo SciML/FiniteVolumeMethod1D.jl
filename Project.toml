@@ -11,9 +11,11 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
 CommonSolve = "0.2"
+ExplicitImports = "1"
 PrecompileTools = "1"
 SciMLBase = "2, 3.1"
-julia = "1"
+Test = "1"
+julia = "1.10"
 
 [extras]
 ExplicitImports = "7d51a73a-1435-4ff3-83d9-f097790105c7"
