@@ -1,5 +1,7 @@
 using Pkg
 using Test
+using FiniteVolumeMethod1D
+using SafeTestsets
 
 const GROUP = get(ENV, "GROUP", "All")
 
@@ -10,9 +12,6 @@ if GROUP == "QA"
 end
 
 if GROUP == "All" || GROUP == "Core"
-    using FiniteVolumeMethod1D
-    using SafeTestsets
-
     @testset "FiniteVolumeMethod1D" begin
         @safetestset "Explicit Imports" begin
             include("explicit_imports.jl")
