@@ -1,4 +1,9 @@
+[files]
+extend-exclude = ["Manifest.toml", "**/Manifest.toml"]
+
 [default.extend-words]
+# Local variable abbreviating "Neumann" boundary condition in test/boundary_conditions.jl
+neum = "neum"
 # Julia-specific functions
 indexin = "indexin"
 findfirst = "findfirst"
