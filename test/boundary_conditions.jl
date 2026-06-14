@@ -1,4 +1,4 @@
-using ..FiniteVolumeMethod1D
+using FiniteVolumeMethod1D
 FVM = FiniteVolumeMethod1D
 
 f = (u, t, p) -> 1.01u^p[1] + p[2] + t

@@ -1,4 +1,4 @@
-using ..FiniteVolumeMethod1D
+using FiniteVolumeMethod1D
 
 mesh_points = sort(rand(100))
 geo = FVMGeometry(mesh_points)

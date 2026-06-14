@@ -1,4 +1,4 @@
-using ..FiniteVolumeMethod1D
+using FiniteVolumeMethod1D
 FVM = FiniteVolumeMethod1D
 
 mesh_points = rand(100)

@@ -1,4 +1,4 @@
-using ..FiniteVolumeMethod1D
+using FiniteVolumeMethod1D
 using SciMLBase
 using LinearAlgebra
 using SparseArrays
