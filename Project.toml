@@ -10,7 +10,7 @@ SciMLBase = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
-CommonSolve = "0.2"
+CommonSolve = "0.2.6"
 PrecompileTools = "1"
 SciMLBase = "3.18"
 SparseArrays = "1"
