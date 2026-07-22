@@ -1,26 +1,28 @@
 abstract type AbstractBoundaryCondition{F, P} end
 (bc::AbstractBoundaryCondition{F, P})(u, t) where {F, P} = bc.f(u, t, bc.p)
 
-@doc raw"""
-    Dirichlet{F,P} <: AbstractBoundaryCondition{F,P}
+"""
+    Dirichlet(f, p = nothing)
+    Dirichlet(; f, p = nothing)
+    Dirichlet(value::Number)
 
-A Dirichlet boundary condition with fields `f` and `p` (default `p = nothing`),
-with `f` being a function of the form `f(u, p)` and `p` being
-the parameters for `f`. 
+A Dirichlet boundary condition for an [`FVMProblem`](@ref).
 
-A Dirichlet boundary condition takes the form
+`f` must accept `(u, t, p)` and return the prescribed value at a boundary. Passing a
+number constructs a constant boundary condition. `p` stores optional parameters passed to
+`f`.
 
-```math
-u(a, t) ↤ f(u(a, t), t, p),
+# Fields
+
+- `f`: Function called as `f(u, t, p)`.
+- `p`: Parameters passed to `f`.
+
+# Example
+
+```julia
+left_boundary = Dirichlet(0.0)
+right_boundary = Dirichlet((u, t, p) -> p * sin(t), 1.0)
 ```
-
-where `a` is one of the endpoints. 
-
-# Constructors 
-
-    Dirichlet(f::Function, p = nothing) -> Dirichlet(f, p)
-    Dirichlet(; f, p = nothing)         -> Dirichlet(f, p)
-    Dirichlet(v::Number)                -> Dirichlet((u, t, p) -> oftype(u, v), nothing)
 """
 Base.@kwdef struct Dirichlet{F, P} <: AbstractBoundaryCondition{F, P}
     f::F
@@ -33,26 +35,27 @@ let v = v
     Dirichlet((u, t, p) -> oftype(u, v))
 end
 
-@doc raw"""
-    Neumann{F,P} <: AbstractBoundaryCondition{F,P}
+"""
+    Neumann(f, p = nothing)
+    Neumann(; f, p = nothing)
+    Neumann(value::Number)
 
-A Neumann boundary condition with fields `f` and `p` (default `p = nothing`),
-with `f` being a function of the form `f(u, t, p)` and `p` being
-the parameters for `f`.
+A Neumann boundary condition for an [`FVMProblem`](@ref).
 
-A Neumann boundary condition takes the form
+`f` must accept `(u, t, p)` and return the boundary derivative. Passing a number constructs
+a constant derivative condition. `p` stores optional parameters passed to `f`.
 
-```math
-\dfrac{\partial u}{\partial x}(a, t) = f(u(a, t), t, p),
+# Fields
+
+- `f`: Function called as `f(u, t, p)`.
+- `p`: Parameters passed to `f`.
+
+# Example
+
+```julia
+left_boundary = Neumann(0.0)
+right_boundary = Neumann((u, t, p) -> p * u, -0.5)
 ```
-
-where `a` is one of the endpoints. 
-
-# Constructors 
-
-    Neumann(f::Function, p = nothing) -> Neumann(f, p)
-    Neumann(; f, p = nothing)         -> Neumann(f, p)
-    Neumann(v::Number)                -> Neumann((u, t, p) -> oftype(u, v), nothing)
 """
 Base.@kwdef struct Neumann{F, P} <: AbstractBoundaryCondition{F, P}
     f::F
@@ -70,14 +73,21 @@ is_neumann(::AbstractBoundaryCondition) = false
 is_neumann(::Neumann) = true
 
 """
-    BoundaryConditions{L, R}
+    BoundaryConditions(lhs, rhs)
+    BoundaryConditions(; lhs, rhs)
 
-The boundary conditions for the FVMProblem.
+Stores the left and right boundary conditions of an [`FVMProblem`](@ref).
 
 # Fields
 
-  - `lhs::L`: The left-hand side boundary condition.
-  - `rhs::R`: The right-hand side boundary condition.
+- `lhs::L`: Boundary condition at the first mesh point.
+- `rhs::R`: Boundary condition at the last mesh point.
+
+# Example
+
+```julia
+boundary_conditions = BoundaryConditions(Dirichlet(0.0), Neumann(0.0))
+```
 
 See also [`Dirichlet`](@ref) and [`Neumann`](@ref) for the types of
 boundary conditions you can construct.

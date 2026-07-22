@@ -1,25 +1,28 @@
 """
-    FVMGeometry{T}
+    FVMGeometry(mesh_points)
+    FVMGeometry(mesh_points, spacings, volumes)
 
-Definition of the geometry for a finite volume method problem.
+Stores the one-dimensional mesh geometry used by an [`FVMProblem`](@ref).
+
+# Arguments
+
+- `mesh_points`: Sorted coordinates of the finite-volume nodes.
+- `spacings`: Distances between adjacent mesh points. Required only by the full constructor.
+- `volumes`: Control-volume widths at the mesh points. Required only by the full
+  constructor.
 
 # Fields
 
-  - `mesh_points::T`: The mesh points. Must be sorted.
-  - `spacings::T`: The spacings between the mesh points.
-  - `volumes::T`: The volumes of the cells defined by the mesh points.
+- `mesh_points::T`: Sorted mesh-point coordinates.
+- `spacings::T`: Distances between adjacent mesh points.
+- `volumes::T`: Widths of the associated control volumes.
 
-# Constructors
+# Example
 
-To construct the geometry, you can directly call the default constructor,
-
-    FVMGeometry(mesh_points, spacings, volumes)
-
-or you can call the convenience constructor,
-
-    FVMGeometry(mesh_points)
-
-which will compute the spacings and volumes for you.
+```julia
+mesh_points = range(0.0, 1.0; length = 11)
+geometry = FVMGeometry(mesh_points)
+```
 
 See also [`FVMProblem`](@ref).
 """
