@@ -65,3 +65,29 @@ end
 function CommonSolve.init(prob::FVMProblem, alg; kwargs...)
     return CommonSolve.init(ODEProblem(prob; kwargs...), alg; kwargs...)
 end
+
+"""
+    solve(prob::FVMProblem, alg; kwargs...)
+
+Solves an [`FVMProblem`](@ref) with a CommonSolve-compatible algorithm.
+
+# Arguments
+
+- `prob::FVMProblem`: Finite-volume problem to solve.
+- `alg`: Algorithm supplied by a CommonSolve-compatible solver package.
+
+# Keywords
+
+- `kwargs...`: Forwarded to the converted `ODEProblem` and the solver.
+
+# Example
+
+```julia
+using OrdinaryDiffEq
+
+solution = solve(problem, Tsit5(); saveat = 0.01)
+```
+"""
+function CommonSolve.solve(prob::FVMProblem, alg; kwargs...)
+    return CommonSolve.solve(ODEProblem(prob; kwargs...), alg; kwargs...)
+end
