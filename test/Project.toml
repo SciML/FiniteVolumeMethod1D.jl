@@ -19,7 +19,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 [compat]
 CairoMakie = "0.15.12"
 DomainSets = "0.8.1"
-LinearSolve = "3.87, 4.2.0"
+LinearSolve = "3.87, 4.2.0, 5.1"
 MethodOfLines = "0.11.13"
 ModelingToolkit = "11.31.0"
 NonlinearSolve = "4.17.1, 4.20.2"
