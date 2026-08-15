@@ -6,10 +6,21 @@ Stores the one-dimensional mesh geometry used by an [`FVMProblem`](@ref).
 
 # Arguments
 
-- `mesh_points`: Sorted coordinates of the finite-volume nodes.
-- `spacings`: Distances between adjacent mesh points. Required only by the full constructor.
-- `volumes`: Control-volume widths at the mesh points. Required only by the full
-  constructor.
+- `mesh_points::AbstractVector`: Sorted coordinates of the finite-volume nodes.
+- `spacings::AbstractVector`: Distances between adjacent mesh points. Required only by
+  the full constructor and must have one fewer entry than `mesh_points`.
+- `volumes::AbstractVector`: Control-volume widths at the mesh points. Required only by
+  the full constructor and must have the same length as `mesh_points`.
+
+# Returns
+
+- `FVMGeometry`: A geometry object containing collected mesh points, spacings, and
+  control-volume widths.
+
+# Throws
+
+- `AssertionError`: If `mesh_points` is not sorted or the input lengths are
+  inconsistent.
 
 # Fields
 
@@ -17,7 +28,7 @@ Stores the one-dimensional mesh geometry used by an [`FVMProblem`](@ref).
 - `spacings::T`: Distances between adjacent mesh points.
 - `volumes::T`: Widths of the associated control volumes.
 
-# Example
+# Examples
 
 ```julia
 mesh_points = range(0.0, 1.0; length = 11)

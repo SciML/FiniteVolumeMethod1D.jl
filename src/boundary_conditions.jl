@@ -1,5 +1,44 @@
+"""
+    AbstractBoundaryCondition{F, P}
+
+Developer interface for endpoint boundary conditions used by [`FVMProblem`](@ref).
+The package supplies the generic two-argument call `bc(u, t)`, which evaluates the
+stored three-argument function `bc.f(u, t, bc.p)`.
+
+# Extension Interface
+
+A custom boundary condition should subtype `AbstractBoundaryCondition{F, P}`, store
+fields named `f` and `p`, and make `f(u, t, p)` return the boundary value or flux.
+Define `is_dirichlet(::YourBoundaryCondition)` to return `true` for a prescribed-value
+condition. Leave it at the default `false` for a flux condition, or define
+`is_neumann(::YourBoundaryCondition)` when the classification should be explicit.
+
+These hooks are developer API. End users should normally use [`Dirichlet`](@ref),
+[`Neumann`](@ref), and [`BoundaryConditions`](@ref).
+"""
 abstract type AbstractBoundaryCondition{F, P} end
 (bc::AbstractBoundaryCondition{F, P})(u, t) where {F, P} = bc.f(u, t, bc.p)
+
+"""
+    is_dirichlet(bc::AbstractBoundaryCondition)
+
+Return whether `bc` imposes a prescribed value at the boundary.
+
+Developer subtypes should specialize this predicate to return `true` for their
+Dirichlet-like conditions. The default is `false`.
+"""
+is_dirichlet(::AbstractBoundaryCondition) = false
+
+"""
+    is_neumann(bc::AbstractBoundaryCondition)
+
+Return whether `bc` imposes a prescribed boundary flux.
+
+The default is `false`; developer subtypes may specialize this predicate when an
+explicit classification is useful. The finite-volume kernel treats a boundary as
+flux-based whenever `is_dirichlet(bc)` is `false`.
+"""
+is_neumann(::AbstractBoundaryCondition) = false
 
 """
     Dirichlet(f, p = nothing)
@@ -17,7 +56,11 @@ number constructs a constant boundary condition. `p` stores optional parameters 
 - `f`: Function called as `f(u, t, p)`.
 - `p`: Parameters passed to `f`.
 
-# Example
+# Returns
+
+- `Dirichlet`: A callable boundary condition whose value is imposed at the endpoint.
+
+# Examples
 
 ```julia
 left_boundary = Dirichlet(0.0)
@@ -50,7 +93,11 @@ a constant derivative condition. `p` stores optional parameters passed to `f`.
 - `f`: Function called as `f(u, t, p)`.
 - `p`: Parameters passed to `f`.
 
-# Example
+# Returns
+
+- `Neumann`: A callable boundary condition whose flux is used at the endpoint.
+
+# Examples
 
 ```julia
 left_boundary = Neumann(0.0)
@@ -67,9 +114,7 @@ let v = v
     Neumann((u, t, p) -> oftype(u, v))
 end
 
-is_dirichlet(::AbstractBoundaryCondition) = false
 is_dirichlet(::Dirichlet) = true
-is_neumann(::AbstractBoundaryCondition) = false
 is_neumann(::Neumann) = true
 
 """
@@ -83,7 +128,11 @@ Stores the left and right boundary conditions of an [`FVMProblem`](@ref).
 - `lhs::L`: Boundary condition at the first mesh point.
 - `rhs::R`: Boundary condition at the last mesh point.
 
-# Example
+# Returns
+
+- `BoundaryConditions`: A pair of endpoint boundary conditions.
+
+# Examples
 
 ```julia
 boundary_conditions = BoundaryConditions(Dirichlet(0.0), Neumann(0.0))

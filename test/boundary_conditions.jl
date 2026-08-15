@@ -36,3 +36,15 @@ neum = Neumann(0)
 bc = BoundaryConditions(dirc, neum)
 @test bc.lhs == dirc
 @test bc.rhs == neum
+
+struct TestDirichlet{F, P} <: FVM.AbstractBoundaryCondition{F, P}
+    f::F
+    p::P
+end
+
+FVM.is_dirichlet(::TestDirichlet) = true
+
+custom = TestDirichlet((u, t, p) -> p * u + t, 2.0)
+@test custom(0.5, 0.25) == 1.25
+@test FVM.is_dirichlet(custom)
+@test !FVM.is_neumann(custom)

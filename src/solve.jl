@@ -76,11 +76,15 @@ Solves an [`FVMProblem`](@ref) with a CommonSolve-compatible algorithm.
 - `prob::FVMProblem`: Finite-volume problem to solve.
 - `alg`: Algorithm supplied by a CommonSolve-compatible solver package.
 
-# Keywords
+# Keyword Arguments
 
 - `kwargs...`: Forwarded to the converted `ODEProblem` and the solver.
 
-# Example
+# Returns
+
+- `SciMLBase.AbstractSciMLSolution`: The solution returned by the selected solver.
+
+# Examples
 
 ```julia
 using OrdinaryDiffEq
