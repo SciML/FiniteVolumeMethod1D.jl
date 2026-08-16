@@ -10,18 +10,21 @@ Defines a one-dimensional diffusion-reaction finite-volume problem.
 
 # Arguments
 
-- `geometry`: An [`FVMGeometry`](@ref) describing the spatial mesh.
-- `boundary_conditions`: A [`BoundaryConditions`](@ref) instance for the mesh endpoints.
+- `mesh_points`: Mesh points for the positional constructor.
+- `lhs`: Left boundary condition for the positional constructor.
+- `rhs`: Right boundary condition for the positional constructor.
+
+# Keyword Arguments
+
+- `geometry::FVMGeometry`: Spatial mesh geometry.
+- `boundary_conditions::BoundaryConditions`: Endpoint boundary conditions.
 - `diffusion_function`: Function called as `(u, x, t, p)` to evaluate diffusion.
-- `initial_condition`: Values at the mesh points at `initial_time`.
-- `final_time`: Final integration time.
-
-# Keywords
-
 - `diffusion_parameters = nothing`: Parameters passed to `diffusion_function`.
 - `reaction_function = Returns(0.0)`: Function called as `(u, x, t, p)` for the reaction.
 - `reaction_parameters = nothing`: Parameters passed to `reaction_function`.
+- `initial_condition`: State values at `initial_time`.
 - `initial_time = 0.0`: Initial integration time.
+- `final_time`: Final integration time.
 
 # Fields
 
@@ -35,7 +38,12 @@ Defines a one-dimensional diffusion-reaction finite-volume problem.
 - `initial_time::FT`: Initial integration time.
 - `final_time::FT`: Final integration time.
 
-# Example
+# Returns
+
+- `FVMProblem`: A finite-volume problem containing the mesh, boundary conditions,
+  callbacks, and model functions.
+
+# Examples
 
 ```julia
 mesh_points = range(0.0, 1.0; length = 11)

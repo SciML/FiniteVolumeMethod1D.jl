@@ -19,6 +19,7 @@ makedocs(;
         "Examples" => "examples.md",
         "Mathematical Details" => "math.md",
         "API" => "api.md",
+        "Developer API" => "developer.md",
     ]
 )
 
