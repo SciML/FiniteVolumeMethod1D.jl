@@ -44,11 +44,11 @@ end
 @test nnz(J) == sum(_J) == 3(length(mesh_points) - 2) + 4
 ode_prob = ODEProblem(prob)
 @test ode_prob.p == prob
-@test ode_prob.f.f.f == FVM.pde_odes!
+@test ode_prob.f.f == FVM.pde_odes!
 @test ode_prob.u0 == initial_condition
 @test ode_prob.tspan == (prob.initial_time, final_time)
 @test ode_prob.f.jac_prototype == J
-cb = ode_prob.kwargs.data.callback.discrete_callbacks
+cb = ode_prob.kwargs[:callback].discrete_callbacks
 lhs_cb, rhs_cb = cb
 @test lhs_cb.condition(0.0, 0.0, 0.0)
 @test !rhs_cb.condition(0.0, 0.0, 0.0)
