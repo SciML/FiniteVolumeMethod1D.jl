@@ -17,8 +17,11 @@ jobs:
     uses: "SciML/.github/.github/workflows/downgrade.yml@v1"
     with:
       julia-version: "lts"
-      # Floor-resolve the Plotting sub-env too (CairoMakie examples moved out of
-      # the root test env). Without this, Downgrade All loads Core's SciMLBase
-      # floor then Plotting's latest LinearSolve and fails EigenvalueProblem.
-      projects: ".,test/Plotting"
+      # Downgrade runs GROUP=All in one process. SciMLTesting then activates the
+      # Plotting sub-env after Core has already loaded floor SciMLBase; the
+      # reusable workflow also strips secondary Manifests before test, so
+      # Plotting re-resolves to latest LinearSolve and hits EigenvalueProblem.
+      # projects: ".,test/Plotting" was tried (run 38323770615) and still fails
+      # that way. Restrict Downgrade to Core; plotting test deps lose floor check.
+      group: "Core"
     secrets: "inherit"
