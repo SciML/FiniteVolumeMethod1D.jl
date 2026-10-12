@@ -72,7 +72,7 @@ ax = Axis(
 ]
 ylims!(ax, -1.0e-6, 0.5)
 xlims!(ax, -1, 1)
-fig_path = normpath(@__DIR__, "..", "test", "figures")
+fig_path = normpath(@__DIR__, "..", "figures")
 @test_reference joinpath(fig_path, "porous_comparison.png") fig
 
 let t_range = LinRange(0.0, final_time, 250)
@@ -85,6 +85,6 @@ let t_range = LinRange(0.0, final_time, 250)
         reduce(hcat, sol_u)[in_int_range, :], colormap = :viridis
     )
     xlims!(ax, -1, 1)
-    fig_path = normpath(@__DIR__, "..", "docs", "src", "figures")
+    fig_path = normpath(@__DIR__, "..", "..", "docs", "src", "figures")
     @test_reference joinpath(fig_path, "porous_surface.png") fig
 end
