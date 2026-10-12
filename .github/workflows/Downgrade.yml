@@ -17,4 +17,8 @@ jobs:
     uses: "SciML/.github/.github/workflows/downgrade.yml@v1"
     with:
       julia-version: "lts"
+      # Floor-resolve the Plotting sub-env too (CairoMakie examples moved out of
+      # the root test env). Without this, Downgrade All loads Core's SciMLBase
+      # floor then Plotting's latest LinearSolve and fails EigenvalueProblem.
+      projects: ".,test/Plotting"
     secrets: "inherit"
