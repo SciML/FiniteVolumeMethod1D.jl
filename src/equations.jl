@@ -61,8 +61,8 @@ end
 jacobian_sparsity(prob::FVMProblem) = jacobian_sparsity(prob.geometry.mesh_points)
 function jacobian_sparsity(pts)
     num_nnz = 3(length(pts) - 2) + 4 # 3 neighbours for each interior node, 2 from each boundary node
-    I = zeros(Int64, num_nnz)
-    J = zeros(Int64, num_nnz)
+    I = zeros(Int, num_nnz)
+    J = zeros(Int, num_nnz)
     V = ones(num_nnz)
     # The left boundary node
     I[1] = firstindex(pts)
