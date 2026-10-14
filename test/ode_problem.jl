@@ -28,6 +28,7 @@ prob = FVMProblem(;
 )
 J = FVM.jacobian_sparsity(prob)
 @test J == FVM.jacobian_sparsity(mesh_points)
+@test J isa SparseMatrixCSC{Float64, Int}
 _J = zeros(length(mesh_points), length(mesh_points))
 for i in eachindex(mesh_points)
     if i == 1

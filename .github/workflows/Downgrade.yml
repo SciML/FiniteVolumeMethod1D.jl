@@ -17,4 +17,7 @@ jobs:
     uses: "SciML/.github/.github/workflows/downgrade.yml@v1"
     with:
       julia-version: "lts"
+      # SciMLTesting resolves test/Plotting's sub-env to latest versions in the same
+      # process that already loaded Core's floor SciMLBase, so only Core is floor-tested.
+      group: "Core"
     secrets: "inherit"
